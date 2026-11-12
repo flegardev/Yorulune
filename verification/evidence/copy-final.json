@@ -1,0 +1,21 @@
+{
+  "command": [
+    "<workspace>\\orbit (1)\\gradlew.bat",
+    "--no-daemon",
+    "--no-configuration-cache",
+    "--console",
+    "plain",
+    "--max-workers=1",
+    "-I",
+    "<workspace>\\kissaten\\tools\\qa.init.gradle",
+    "assembleDebug",
+    "testDebugUnitTest",
+    "lintDebug",
+    "bundleRelease",
+    "-PkissatenUnsignedRelease=true"
+  ],
+  "exitCode": 0,
+  "seconds": 214.6,
+  "log": "<workspace>\\kissaten\\evidence\\orbit\\copy-final.log",
+  "sourceFingerprint": "e04c3f768f65476670c79ef8eb94a0fcce2729acd5268b9d9f0c48a513e48cb4"
+}

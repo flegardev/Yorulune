@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="firestore_database_id" translatable="false">ai-studio-android-orbit-c9b50462-2967-4352-bdab-99f73e275ad5</string>
+    <string name="recaptcha_site_key" translatable="false">6Ld-uRkuAAAAAJYIjJj_bZ4_1ZGPikQARPVYFwcQ</string>
+</resources>

@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "serial": "emulator-5554",
+  "before": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1500,
+      "total": 1500,
+      "active": true,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": true,
+    "uptime": 3160876,
+    "boot": 5
+  },
+  "after": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1487,
+      "total": 1500,
+      "active": false,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": false,
+    "uptime": 3174783,
+    "boot": 5
+  },
+  "resumedAndPaused": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1480,
+      "total": 1500,
+      "active": false,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": false,
+    "uptime": 3201676,
+    "boot": 5
+  },
+  "note": "Actual UI start, background, force-stop, relaunch, explicit resume/pause. Original timer snapshot restored; no history records added. Reboot/disk-full/expiry notification behavior is separate."
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "provider": "OrbitHomeWidgetProvider",
+    "width": 280,
+    "height": 240,
+    "texts": [
+      "YORULUNE \u2022 TODAY'S CHECKLIST (1/10)",
+      "7 Today Tasks (Tap item to complete):",
+      "\u25ef [P1] Finalize Q4 System Architecture & Release Checklist",
+      "\u25ef [P1] Pay Monthly Rent & Fiber Internet Bill",
+      "\u25ef [P2] Polish Editorial Paper, Dark & True OLED Themes",
+      "Mode \u21bb \u2022 0%",
+      "+ Open"
+    ],
+    "fontScale": "1",
+    "variantHeaders": [
+      "YORULUNE \u2022 TODAY'S CHECKLIST (1/10)",
+      "YORULUNE \u2022 QUICK TASK CAPTURE (2/10)",
+      "YORULUNE \u2022 MINI CALENDAR (3/10)",
+      "YORULUNE \u2022 UPCOMING REMINDERS (4/10)",
+      "YORULUNE \u2022 HABIT PROGRESS (5/10)",
+      "YORULUNE \u2022 DAILY PROGRESS RING (6/10)",
+      "YORULUNE \u2022 IMPORTANT TASKS (7/10)",
+      "YORULUNE \u2022 DEADLINE COUNTDOWN (8/10)",
+      "YORULUNE \u2022 FOCUS SESSION STATUS (9/10)",
+      "YORULUNE \u2022 PROJECT PROGRESS (10/10)"
+    ]
+  }
+]

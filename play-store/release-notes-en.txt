@@ -1,0 +1,7 @@
+Draft for owner review — Yorulune (provisional)
+• New café-inspired identity, launcher artwork and Japanese-designed fonts.
+• Improved theme consistency and readable accent colors.
+• Existing package identity and local database schema retained.
+• Safer document imports and clearer export/privacy controls.
+
+Interrupted focus timers now recover paused after process death. Resume when ready.

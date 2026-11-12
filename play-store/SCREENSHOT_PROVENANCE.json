@@ -1,0 +1,100 @@
+[
+  {
+    "file": "play-store/screenshots/phone/01-light-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/light-home.png",
+    "sourceCapturedAt": "2026-11-12T07:28:17.398411+01:00",
+    "sourceSha256": "7ae244c44fe84693b4f2f2a6db47c8164b80ecf6a47a19a598aadaa3fd1a1b57",
+    "sha256": "70cd32decc6fa3d422ee75cb69a2cd457f5f118efa87fa0b12efaeb06cd55d6c",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune light home"
+  },
+  {
+    "file": "play-store/screenshots/phone/02-tasks.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/tasks.png",
+    "sourceCapturedAt": "2026-11-12T07:29:18.846590+01:00",
+    "sourceSha256": "099baea3c483162c94f766b1144feca81ab3dd5b4446ece63ee8c5ac7514a721",
+    "sha256": "bb3cc3c5e68c8f72820492bbb0cde630fb30d80eb7509cf763fa7dfca62d0034",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune tasks"
+  },
+  {
+    "file": "play-store/screenshots/phone/03-calendar.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/calendar.png",
+    "sourceCapturedAt": "2026-11-12T07:29:26.052237+01:00",
+    "sourceSha256": "82e8de88487126c067c4180ec6c1eead670c4b8871f6b2c4242379581b15a85a",
+    "sha256": "b140017735e0856787a684e4e48fca881584643cd9ba990e526422ab1b43a4b7",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune calendar"
+  },
+  {
+    "file": "play-store/screenshots/phone/04-habits.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/habits.png",
+    "sourceCapturedAt": "2026-11-12T07:29:33.185843+01:00",
+    "sourceSha256": "49f645e2459d6ed7d2945ce75e553cff0ccc01311b5b50fe892477271cb1b362",
+    "sha256": "88d830e0526a033250314f259d9db72615f16b488369e971dad7110e64a4429e",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune habits"
+  },
+  {
+    "file": "play-store/screenshots/phone/05-focus.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/focus.png",
+    "sourceCapturedAt": "2026-11-12T07:29:40.278407+01:00",
+    "sourceSha256": "788ee1571b179b3ee9c283c3a91d18f1d8610ae261afb33a8169cd22ea2edc21",
+    "sha256": "6a6dccc023aba393d59b511e298424e5f9704285ae1788519196b90ce46213b2",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune focus"
+  },
+  {
+    "file": "play-store/screenshots/phone/06-dark-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/dark-home.png",
+    "sourceCapturedAt": "2026-11-12T07:28:35.580708+01:00",
+    "sourceSha256": "58c67b6590d906a690a7031bfa895ad7f17fed752b2e9353fe48af6feadb1562",
+    "sha256": "fcdf5be38bb337806aae386d69fe80e8b43f978e0ab782662e33ba32cf2f4e3f",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune dark home"
+  },
+  {
+    "file": "play-store/screenshots/phone/07-oled-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/matrix-standard/oled-home.png",
+    "sourceCapturedAt": "2026-11-12T07:28:53.629287+01:00",
+    "sourceSha256": "6e0abdb1ac16962872f934909ec780fda40f8893d7d02a44c058f4b8c6929b5d",
+    "sha256": "4eea996eab9f917b4151e44ef897976abb27bbc4054a0578786082fc2e358ca1",
+    "size": [
+      1080,
+      1920
+    ],
+    "mode": "RGB",
+    "pixelMatchAfterRgbConversion": true,
+    "description": "Yorulune oled home"
+  }
+]
