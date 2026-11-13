@@ -46,11 +46,11 @@ object OrbitReminderScheduler {
     const val CHANNEL_SPECIAL = "orbit_reminders_special"
     const val CHANNEL_FOCUS = "orbit_reminders_focus"
 
-    const val ACTION_FIRE_REMINDER = "com.example.orbit.ACTION_FIRE_REMINDER"
-    const val ACTION_COMPLETE_TASK = "com.example.orbit.ACTION_COMPLETE_TASK"
-    const val ACTION_SNOOZE_TASK = "com.example.orbit.ACTION_SNOOZE_TASK"
-    const val ACTION_RESCHEDULE_TOMORROW = "com.example.orbit.ACTION_RESCHEDULE_TOMORROW"
-    const val ACTION_CYCLE_WIDGET_VARIANT = "com.example.orbit.ACTION_CYCLE_WIDGET_VARIANT"
+    const val ACTION_FIRE_REMINDER = "com.tiniflegar.yorulune.ACTION_FIRE_REMINDER"
+    const val ACTION_COMPLETE_TASK = "com.tiniflegar.yorulune.ACTION_COMPLETE_TASK"
+    const val ACTION_SNOOZE_TASK = "com.tiniflegar.yorulune.ACTION_SNOOZE_TASK"
+    const val ACTION_RESCHEDULE_TOMORROW = "com.tiniflegar.yorulune.ACTION_RESCHEDULE_TOMORROW"
+    const val ACTION_CYCLE_WIDGET_VARIANT = "com.tiniflegar.yorulune.ACTION_CYCLE_WIDGET_VARIANT"
 
     const val EXTRA_TASK_ID = "extra_task_id"
     const val EXTRA_OFFSET_MINUTES = "extra_offset_minutes"

@@ -4,7 +4,7 @@
 
 **BLOCKED FOR PRODUCTION.** Unsigned validation AAB is **NOT UPLOADABLE**; no public Play release claimed.
 
-Package `com.aistudio.orbitproductivity.vxqpmr`, current validation code `1` (not certified unused). Baseline `22028fd3e2ca8e7bc979d8f831865dc955830453`; release branch `codex/play-launch-20261113`.
+Proposed Play package `com.tiniflegar.yorulune` (Console reports available). Source namespace `com.example` remains internal. Validation code `1` is not a Console-confirmed release version. Baseline `22028fd3e2ca8e7bc979d8f831865dc955830453`; release branch `codex/play-launch-20261113`.
 
 Build exit 0; 35 host tests, 0 failures. Lint: `{"debug": {"available": true, "errors": 0, "warnings": 73}, "release": {"available": true, "errors": 0, "warnings": 73}}`. Privacy: https://hydronudge-privacy.vercel.app/yorulune/. See TEST_RESULTS.md, SECURITY_REPORT.md, DEVICE_TEST_MATRIX.md, ASSET_VALIDATION.md and ARTIFACT_HASHES.md.
 
@@ -19,5 +19,9 @@ Runtime scope is reported from saved results. Missing records mean PENDING. Hist
 Correct package/version/signing identity; matching owner keystore; accurate approved legal/policy/audience/country declarations; applicable health-account eligibility; brand clearance; genuine testing/production access. The three grouped actions are in OWNER_ONLY_ACTIONS.md.
 
 Live Console: Personal account, trader-status action shown. Older Returnmark package `com.tiniflegar.returnmark` was separately deleted with owner verification and is not a signing/testing identity for any of these apps. The recorded HydroNudge URL returned error `587C5E5E`; no fresh upload certificate/history was inferred from older notes. No duplicate app was created and no unsigned AAB was uploaded.
+
+## C. Fresh package migration
+
+The application ID and reminder/widget action identifiers now use `com.tiniflegar.yorulune`; Room, DataStore and JSON backup identifiers/formats remain unchanged. The new package installs separately; users must export a full JSON backup in the old app and import it in the new app to move local records. Console app creation and initial signing remain pending owner review of the policy and export certifications. The live privacy route still identifies the previous package; the corrected in-repository policy is a draft pending owner approval before publication.
 
 [Current review gallery](GALLERY.html), [seven-screen contact sheet](evidence/store-contact-sheet.jpg), [unresolved System UI dialog](evidence/runtime-system-ui-dialog.png). The dialog was observed during Yorulune navigation on the shared API 37 AVD; no underlying cause is asserted.
