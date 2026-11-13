@@ -28,5 +28,11 @@
     "package": "com.tiniflegar.yorulune",
     "result": "1/1 passed.",
     "details": "API 24 emulator emulator-5556; navigation/theme recreation check passed."
+  },
+  "processDeathSmoke": {
+    "api": 26,
+    "result": "PASS",
+    "method": "adb force-stop followed by launcher relaunch; resumed activity verified",
+    "scope": "Debug build, no data wipe."
   }
 }
