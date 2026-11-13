@@ -17,7 +17,13 @@
     "path": "C:\\Users\\tinif\\Downloads\\hi\\orbit (1)\\app\\build\\outputs\\bundle\\release\\app-release.aab",
     "sha256": "A8DF21B37BA1A20A1298E1C5A3F1175A70FEB68CC1D1DE058CD529387A75542E",
     "signed": false,
-    "uploadable": false
+    "uploadable": false,
+    "manifestPermissions": [
+      "android.permission.VIBRATE",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "com.tiniflegar.yorulune.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ]
   },
   "buildTasks": "assembleDebug, testDebugUnitTest, lintDebug, bundleRelease, assembleDebugAndroidTest",
   "playConsole": "Package name availability checked; app entry not created because required policy and export-law certifications await owner approval.",
