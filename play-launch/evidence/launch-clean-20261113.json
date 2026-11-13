@@ -1,0 +1,24 @@
+{
+  "command": [
+    "<workspace>\\orbit (1)\\gradlew.bat",
+    "--no-daemon",
+    "--no-configuration-cache",
+    "--console",
+    "plain",
+    "--max-workers=1",
+    "-I",
+    "<workspace>\\kissaten\\tools\\qa.init.gradle",
+    "clean",
+    ":app:assembleDebug",
+    ":app:testDebugUnitTest",
+    ":app:lintDebug",
+    ":app:lintRelease",
+    ":app:assembleDebugAndroidTest",
+    ":app:bundleRelease",
+    "-PkissatenUnsignedRelease=true"
+  ],
+  "exitCode": 0,
+  "seconds": 463.5,
+  "log": "<workspace>\\kissaten\\evidence\\orbit\\launch-clean-20261113.log",
+  "sourceFingerprint": "451c0dd570669861e181fe04b7b303352d7bd9ee8a99b41e2a9b097051a83aa3"
+}

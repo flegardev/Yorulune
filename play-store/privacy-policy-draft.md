@@ -1,17 +1,30 @@
-# Yorulune privacy policy — local draft, 11 November 2026
+# Yorulune policy for owner review
 
-Yorulune was previously called Orbit. This display-name change does not change the existing Android application identifier or transfer your records to another service.
+Yorulune Privacy Policy
+Publisher and product owner: Tini Flegar
+Support and privacy contact: tini.flegar@gmail.com
+Effective date: 13 November 2026
+Android package: com.aistudio.orbitproductivity.vxqpmr
 
-The app is free, has no ads, subscriptions, paywalls, mandatory accounts, AI or external analytics/tracking SDKs. Personal records and preferences are stored in private local storage on your Android device. The release manifest does not request Internet access. No server or cloud database is required for core functions.
+Local records and app operation
+Yorulune keeps tasks, projects, reminders, calendar plans, habit and routine records, focus sessions and preferences in Android app-private storage on this device. Optional timer-recovery snapshots preserve elapsed time and selected session details and reopen paused after interruption. References may contain file locations or links that you save. No account is required.
 
-Android automatic cloud backup and device transfer are disabled by the app's backup configuration. You are responsible for keeping exports you want to retain when changing devices.
+The Android app is free, contains no advertisements, purchases, subscriptions, AI features or external analytics, and does not require a server or app-controlled cloud synchronization. Its release manifest has no Internet permission. Core features work offline. Opening an external link hands it to your browser or another app under that app's privacy practices.
 
-You can explicitly export data through the Android system document picker or use the available preview/share tools. Exports are human-readable and unencrypted. Your chosen document provider, including a cloud provider, manages the destination according to its own terms. Copies in those destinations are outside this app's private storage and must be deleted separately by you. Copying to the clipboard also places data under Android/clipboard behavior outside the app.
+Exports, sharing and document providers
+You choose whether to export or share records. Exports are unencrypted and readable by anyone with file access. Android's document picker lets you choose a destination, which may be a cloud-backed provider that stores or synchronizes files under its own terms. Clipboard and share tools transfer selected content outside private app storage. Imports read only the selected file and validate it before the confirmed restore/merge. Keep exports private and delete provider-held copies separately when no longer needed.
 
-A private local recovery snapshot preserves interrupted focus timers. An interrupted session reopens paused; resume it explicitly. This snapshot is separate from saved focus history and manual record exports.
+Permissions and visible information
+Notifications and home-screen widgets may display selected records outside the main app; visibility depends on your lock-screen, launcher and Android settings. Notification permission is optional. Android may delay scheduled work to protect battery life. File selection uses the system picker rather than broad storage access.
 
-Notification permission enables requested reminders or focus updates. Reminders can be delayed by Android's battery and background limits. Android widgets display selected records on the home screen; consider who can see your unlocked device. The app does not claim additional database encryption; Android's normal application sandbox and device security apply.
+Deletion, backups and security
+Use the app's record editing/deletion controls where offered. Android's app-storage controls can erase all local records and settings; uninstalling normally removes private app data. Those actions do not erase exports, shared copies or support emails. No app account exists, so there is no remote account to delete.
 
-You can edit or remove records through the app's controls. Full data deletion is available through app settings where implemented or Android's app-storage controls; exports elsewhere remain your responsibility. Existing supported backups from the former product name remain recognizable.
+The app disables automatic Android cloud backup and excludes its records from supported device-transfer mechanisms. OS versions, manufacturers and user-selected providers operate outside the app's control; no absolute prevention of every external transfer is promised. The publisher cannot recover lost local data. Export a private backup before changing devices if you want to keep your records.
 
-Legal owner: [OWNER_LEGAL_NAME]. Support/privacy contact: [OWNER_SUPPORT_EMAIL]. Public policy URL: [OWNER_APPROVED_PRIVACY_URL]. Replace these placeholders, review child/audience and health-app disclosures where relevant, approve wording and update the existing public policy before submitting to a store. This draft has not been published.
+The app uses Android's normal private-storage protections and adds no separate database or backup encryption. Device encryption and access protection depend on the device. No absolute security guarantee is made.
+
+Support and the policy website
+If you email tini.flegar@gmail.com, the publisher receives your address, message and any attachments you choose to send, uses them to answer your request and handle necessary follow-up, and retains them only as needed for that purpose or legal obligations. Gmail handles correspondence under Google's privacy practices. Ask by email about deletion; provider retention and legal requirements may affect it. Do not send a complete journal or sensitive personal records for routine support.
+
+Visiting a policy website sends ordinary web-request information to its hosting provider for delivery and security, separately from using the offline app. The prepared policy pages contain no analytics, forms, external fonts or tracking scripts. Policy changes must be reflected in the app and its public policy before a changed release is distributed.

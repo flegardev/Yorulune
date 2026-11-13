@@ -1,0 +1,65 @@
+[
+  {
+    "qaApkSha256": "b6a3b89acdcb1b6f2a8643a37141ae11e1f012a6af4a03dc33e17b61f0ac7200",
+    "sourceAabSha256": "7559b8400228bbdc4a7eebecd07946c508430adae624130d6ab587a62bf42af5",
+    "api": 24,
+    "serial": "emulator-5558",
+    "avd": "Kissaten_Launch_API24",
+    "pageSize": 4096,
+    "releaseBundleDerived": true,
+    "qaCertificateOnly": true,
+    "passed": true,
+    "routes": [
+      "Home",
+      "Tasks",
+      "Calendar",
+      "Habits",
+      "Focus"
+    ],
+    "fontScale": 1.5,
+    "offlineRestart": true,
+    "note": "Actual release-bundle-derived universal APK, signed only with the existing QA debug key. UI navigation, large-font home and offline restart; no physical-device or exhaustive background/accessibility claim."
+  },
+  {
+    "qaApkSha256": "b6a3b89acdcb1b6f2a8643a37141ae11e1f012a6af4a03dc33e17b61f0ac7200",
+    "sourceAabSha256": "7559b8400228bbdc4a7eebecd07946c508430adae624130d6ab587a62bf42af5",
+    "api": 35,
+    "serial": "emulator-5560",
+    "avd": "Kissaten_Launch_API35",
+    "pageSize": 16384,
+    "releaseBundleDerived": true,
+    "qaCertificateOnly": true,
+    "passed": true,
+    "routes": [
+      "Home",
+      "Tasks",
+      "Calendar",
+      "Habits",
+      "Focus"
+    ],
+    "fontScale": 1.5,
+    "offlineRestart": true,
+    "note": "Actual release-bundle-derived universal APK, signed only with the existing QA debug key. UI navigation, large-font home and offline restart; no physical-device or exhaustive background/accessibility claim."
+  },
+  {
+    "qaApkSha256": "b6a3b89acdcb1b6f2a8643a37141ae11e1f012a6af4a03dc33e17b61f0ac7200",
+    "sourceAabSha256": "7559b8400228bbdc4a7eebecd07946c508430adae624130d6ab587a62bf42af5",
+    "api": 26,
+    "serial": "emulator-5556",
+    "avd": "Kissaten_Launch_API26",
+    "pageSize": 4096,
+    "releaseBundleDerived": true,
+    "qaCertificateOnly": true,
+    "passed": true,
+    "routes": [
+      "Home",
+      "Tasks",
+      "Calendar",
+      "Habits",
+      "Focus"
+    ],
+    "fontScale": 1.5,
+    "offlineRestart": true,
+    "note": "Actual release-bundle-derived universal APK, signed only with the existing QA debug key. UI navigation, large-font home and offline restart; no physical-device or exhaustive background/accessibility claim."
+  }
+]

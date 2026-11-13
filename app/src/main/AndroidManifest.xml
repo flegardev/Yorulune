@@ -48,11 +48,11 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="com.example.orbit.ACTION_FIRE_REMINDER" />
-                <action android:name="com.example.orbit.ACTION_COMPLETE_TASK" />
-                <action android:name="com.example.orbit.ACTION_SNOOZE_TASK" />
-                <action android:name="com.example.orbit.ACTION_RESCHEDULE_TOMORROW" />
-                <action android:name="com.example.orbit.ACTION_CYCLE_WIDGET_VARIANT" />
+                <action android:name="com.tiniflegar.yorulune.ACTION_FIRE_REMINDER" />
+                <action android:name="com.tiniflegar.yorulune.ACTION_COMPLETE_TASK" />
+                <action android:name="com.tiniflegar.yorulune.ACTION_SNOOZE_TASK" />
+                <action android:name="com.tiniflegar.yorulune.ACTION_RESCHEDULE_TOMORROW" />
+                <action android:name="com.tiniflegar.yorulune.ACTION_CYCLE_WIDGET_VARIANT" />
             </intent-filter>
         </receiver>
     </application>

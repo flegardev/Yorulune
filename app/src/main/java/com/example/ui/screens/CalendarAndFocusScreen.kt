@@ -57,6 +57,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import com.example.ui.theme.kissatenTone
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
@@ -186,18 +187,18 @@ fun SmartCalendarScreen(
                         Text(
                             text = date.format(DateTimeFormatter.ofPattern("EEE")).uppercase(),
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = date.dayOfMonth.toString(),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "$dayTaskCount tasks",
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (isSelected) Color.White.copy(alpha = 0.8f) else OrbitCyan
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant)
                         )
                     }
                 }
@@ -249,7 +250,7 @@ fun SmartCalendarScreen(
                     Text(
                         text = "${((1f - capacityRatio) * workdayCapacityMinutes).toInt()}m free focus capacity",
                         style = MaterialTheme.typography.labelSmall,
-                        color = OrbitEmerald
+                        color = kissatenTone(OrbitEmerald, MaterialTheme.colorScheme.surfaceVariant)
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -269,7 +270,7 @@ fun SmartCalendarScreen(
                         Text(
                             text = "Overlap at ${conflictingHours.joinToString { SmartTaskParser.formatHourMinute(it, 0, use24Hour) }} — tap Fill Slots to spread evenly.",
                             style = MaterialTheme.typography.bodySmall,
-                            color = OrbitAmber
+                            color = kissatenTone(OrbitAmber, MaterialTheme.colorScheme.surfaceVariant)
                         )
                     }
                 }
@@ -330,7 +331,7 @@ fun SmartCalendarScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(SmartTaskParser.formatEpochDay(day, todayEpoch), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                    Text("${list.size} tasks • ${list.sumOf { it.estimatedMinutes }}m", style = MaterialTheme.typography.labelSmall, color = OrbitCyan)
+                                    Text("${list.size} tasks • ${list.sumOf { it.estimatedMinutes }}m", style = MaterialTheme.typography.labelSmall, color = kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant))
                                 }
                                 list.take(3).forEach { t ->
                                     Text("• ${t.title}", style = MaterialTheme.typography.bodySmall, maxLines = 1)
@@ -380,7 +381,7 @@ fun SmartCalendarScreen(
                                     ) {
                                         Text(d.toString(), style = MaterialTheme.typography.labelMedium)
                                         if (cnt > 0) {
-                                            Text("${cnt}•", style = MaterialTheme.typography.labelSmall, color = OrbitCyan)
+                                            Text("${cnt}•", style = MaterialTheme.typography.labelSmall, color = kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant))
                                         }
                                     }
                                 }
@@ -418,7 +419,7 @@ fun SmartCalendarScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text("${m.name.lowercase().replaceFirstChar { it.uppercase() }} $year", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                Text("$mCount scheduled tasks", style = MaterialTheme.typography.labelMedium, color = OrbitCyan)
+                                Text("$mCount scheduled tasks", style = MaterialTheme.typography.labelMedium, color = kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant))
                             }
                         }
                     }
@@ -436,7 +437,7 @@ fun SmartCalendarScreen(
                             Text(
                                 text = "Unscheduled Tasks (${unscheduledDayTasks.size}) — Tap any free hour below to assign manually:",
                                 style = MaterialTheme.typography.labelLarge,
-                                color = OrbitCyan,
+                                color = kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant),
                                 modifier = Modifier.padding(vertical = 4.dp)
                             )
                         }
@@ -482,7 +483,7 @@ fun SmartCalendarScreen(
                                             Text(
                                                 text = "+ Block \"${unscheduledDayTasks.first().title.take(20)}\"",
                                                 style = MaterialTheme.typography.labelSmall,
-                                                color = OrbitCyan
+                                                color = kissatenTone(OrbitCyan, MaterialTheme.colorScheme.surfaceVariant)
                                             )
                                         }
                                     }

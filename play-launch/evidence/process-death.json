@@ -1,0 +1,43 @@
+{
+  "serial": "emulator-5554",
+  "before": {
+    "orbit_local_productivity.db": {
+      "integrity": [
+        [
+          "ok"
+        ]
+      ],
+      "rows": {
+        "android_metadata": 1,
+        "tasks": 8,
+        "projects": 4,
+        "habits": 6,
+        "focus_sessions": 2,
+        "automations": 2,
+        "preferences": 1
+      },
+      "sha256": "6b67a54621fe023f1147a2ce423ef000c572364795ca6637e2b31436bfc37e5d"
+    }
+  },
+  "after": {
+    "orbit_local_productivity.db": {
+      "integrity": [
+        [
+          "ok"
+        ]
+      ],
+      "rows": {
+        "android_metadata": 1,
+        "tasks": 8,
+        "projects": 4,
+        "habits": 6,
+        "focus_sessions": 2,
+        "automations": 2,
+        "preferences": 1
+      },
+      "sha256": "6b67a54621fe023f1147a2ce423ef000c572364795ca6637e2b31436bfc37e5d"
+    }
+  },
+  "passed": true,
+  "note": "Read-only database row digest, restart, integrity_check; raw fixture databases are private QA artifacts, never store assets."
+}
