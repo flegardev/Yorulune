@@ -12,6 +12,7 @@ import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -66,6 +67,17 @@ object OrbitReminderScheduler {
 
     fun requestCodeForOffset(taskId: String, index: Int): Int =
         (taskId.hashCode() * 31) + index
+
+    /** Extras are not part of PendingIntent identity. Keep colliding task hashes independent. */
+    fun reminderIntent(context: Context, taskId: String, index: Int): Intent =
+        Intent(context, OrbitReminderReceiver::class.java).apply {
+            action = ACTION_FIRE_REMINDER
+            data = taskActionUri(taskId, "offset-$index")
+            putExtra(EXTRA_TASK_ID, taskId)
+        }
+
+    private fun taskActionUri(taskId: String, action: String): Uri = Uri.Builder()
+        .scheme("yorulune").authority("local-reminder").appendPath(taskId).appendPath(action).build()
 
     fun activeTrackedOffsetCount(taskId: String): Int =
         scheduledOffsetCountByTaskId[taskId] ?: 0
@@ -202,9 +214,7 @@ object OrbitReminderScheduler {
                 zoneId = zoneId
             )
             if (triggerMillis > nowMillis) {
-                val intent = Intent(context, OrbitReminderReceiver::class.java).apply {
-                    action = ACTION_FIRE_REMINDER
-                    putExtra(EXTRA_TASK_ID, task.id)
+                val intent = reminderIntent(context, task.id, idx).apply {
                     putExtra(EXTRA_OFFSET_MINUTES, offsetMins)
                 }
                 val requestCode = requestCodeForOffset(task.id, idx)
@@ -247,10 +257,7 @@ object OrbitReminderScheduler {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
         for (idx in 0 until totalSlots) {
-            val intent = Intent(context, OrbitReminderReceiver::class.java).apply {
-                action = ACTION_FIRE_REMINDER
-                putExtra(EXTRA_TASK_ID, taskId)
-            }
+            val intent = reminderIntent(context, taskId, idx)
             val requestCode = requestCodeForOffset(taskId, idx)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -262,8 +269,19 @@ object OrbitReminderScheduler {
                 alarmManager?.cancel(pendingIntent)
                 pendingIntent.cancel()
             }
+            // Remove alarms from the pre-launch request-code-only implementation on upgrade.
+            val legacyIntent = Intent(context, OrbitReminderReceiver::class.java).apply {
+                action = ACTION_FIRE_REMINDER
+                putExtra(EXTRA_TASK_ID, taskId)
+            }
+            PendingIntent.getBroadcast(context, requestCode, legacyIntent,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)?.let { legacy ->
+                alarmManager?.cancel(legacy)
+                legacy.cancel()
+            }
         }
-        NotificationManagerCompat.from(context).cancel(taskId.hashCode())
+        NotificationManagerCompat.from(context).cancel(taskId, 0)
+        NotificationManagerCompat.from(context).cancel(taskId.hashCode()) // Retire legacy untagged notifications.
     }
 
     fun triggerImmediateReminder(
@@ -297,6 +315,7 @@ object OrbitReminderScheduler {
 
         val completeIntent = Intent(context, OrbitReminderReceiver::class.java).apply {
             action = ACTION_COMPLETE_TASK
+            data = taskActionUri(task.id, ACTION_COMPLETE_TASK)
             putExtra(EXTRA_TASK_ID, task.id)
         }
         val completePending = PendingIntent.getBroadcast(
@@ -308,6 +327,7 @@ object OrbitReminderScheduler {
 
         val snoozeIntent = Intent(context, OrbitReminderReceiver::class.java).apply {
             action = ACTION_SNOOZE_TASK
+            data = taskActionUri(task.id, ACTION_SNOOZE_TASK)
             putExtra(EXTRA_TASK_ID, task.id)
             putExtra(EXTRA_SNOOZE_MINUTES, 15)
         }
@@ -320,6 +340,7 @@ object OrbitReminderScheduler {
 
         val tomorrowIntent = Intent(context, OrbitReminderReceiver::class.java).apply {
             action = ACTION_RESCHEDULE_TOMORROW
+            data = taskActionUri(task.id, ACTION_RESCHEDULE_TOMORROW)
             putExtra(EXTRA_TASK_ID, task.id)
         }
         val tomorrowPending = PendingIntent.getBroadcast(
@@ -349,7 +370,7 @@ object OrbitReminderScheduler {
             .build()
 
         return try {
-            NotificationManagerCompat.from(context).notify(task.id.hashCode(), notification)
+            NotificationManagerCompat.from(context).notify(task.id, 0, notification)
             "Notification delivered (Complete / Snooze 15m / Tomorrow actions ready)"
         } catch (e: SecurityException) {
             "In-App Reminder Active (System notification permission restricted)"

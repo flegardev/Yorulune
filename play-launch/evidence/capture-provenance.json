@@ -1,0 +1,50 @@
+[
+  {
+    "file": "api24-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api24/home.png",
+    "sha256": "b6da504c4e20c3c77243160baa7845de09323c9ae967d6c16abe8e14f0e601dc",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "api24-font150.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api24/font150.png",
+    "sha256": "6c0159ab5644865981bf77dd82cc9679d4459c79dffa0faf2d79bad6ea12c84e",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "api26-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api26/home.png",
+    "sha256": "01307b2be3b0c9def563a3f5657c44baf4f37c8990d71761bec4546d894406fe",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "api26-font150.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api26/font150.png",
+    "sha256": "deec2088f551eeed72196686737ccf3241ef2eaead927e405e848dadeb9ec1b0",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "api35-home.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api35/home.png",
+    "sha256": "f149598f3413c5828aa76495fe4d72aeb6ee09cb728f4dda5e159e57c81a8586",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "api35-font150.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-api35/font150.png",
+    "sha256": "efb5b528b05b17ffa698b9ef02b9f166109bd71df2fccf6ddeb06aaed67cc3d8",
+    "note": "Actual bundle-derived QA-only release APK on a new explicitly gated AVD; fictional/empty test records. No editing."
+  },
+  {
+    "file": "privacy-font100.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-privacy/font100.png",
+    "sha256": "a41563244b74bbe5689a84b0149b2b6847daa129b7344b66da273209e8e76476",
+    "note": "Actual final debug APK offline policy dialog. No editing."
+  },
+  {
+    "file": "privacy-font150.png",
+    "source": "kissaten/evidence/orbit/screenshots/launch-privacy/font150.png",
+    "sha256": "a19af52cbba73c5e1ce012d36068ce194387430ada75ee504fe25d3dee5b6d87",
+    "note": "Actual final debug APK offline policy dialog. No editing."
+  }
+]

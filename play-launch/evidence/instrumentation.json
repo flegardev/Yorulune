@@ -1,0 +1,23 @@
+{
+  "command": [
+    "adb",
+    "-s",
+    "emulator-5554",
+    "shell",
+    "am",
+    "instrument",
+    "-w",
+    "-r",
+    "-e",
+    "class",
+    "com.example.KissatenDeviceTest",
+    "com.aistudio.orbitproductivity.vxqpmr.test/androidx.test.runner.AndroidJUnitRunner"
+  ],
+  "exitCode": 0,
+  "passed": true,
+  "notificationPermissionBefore": "denied",
+  "notificationPermissionAfter": "denied",
+  "completedAt": "2026-11-13T10:02:05",
+  "testedApkSha256": "92c1f1d1298ad42c0472661a2593aa25b867a29c8beeeed429a6736274336e4e",
+  "testApkSha256": "59dd6a619ac748538dad0b976398ca24932fe0ffdd09f4bc62339b5ae9b562c8"
+}

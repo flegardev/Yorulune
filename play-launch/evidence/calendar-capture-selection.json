@@ -1,0 +1,6 @@
+{
+  "selectedOriginal": "kissaten/launch-20261113/api37-isolated-retry.png",
+  "selectedFor": "kissaten/evidence/orbit/screenshots/matrix-standard/calendar.png",
+  "reason": "First capture was a solid transient frame during the OS package-update activity transition. Selected the later genuine, visually inspected complete Calendar screen from the same final installed APK. No retouching/cropping/compositing.",
+  "apkSha256": "92c1f1d1298ad42c0472661a2593aa25b867a29c8beeeed429a6736274336e4e"
+}

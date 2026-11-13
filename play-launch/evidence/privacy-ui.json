@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "serial": "emulator-5554",
+  "api": 37,
+  "apkSha256": "92c1f1d1298ad42c0472661a2593aa25b867a29c8beeeed429a6736274336e4e",
+  "cases": [
+    {
+      "fontScale": 1,
+      "dialogOpened": true,
+      "doneAccessible": true
+    },
+    {
+      "fontScale": 1.5,
+      "dialogOpened": true,
+      "doneAccessible": true
+    }
+  ],
+  "note": "Actual bundled-text policy dialog, with accessible dismissal at 100% and 150% font. Screenshots reviewed separately; not TalkBack certification."
+}
