@@ -1,0 +1,14 @@
+[
+  {
+    "file": "app/build/outputs/bundle/release/app-release.aab",
+    "kind": "UNSIGNED VALIDATION AAB \u2014 NOT UPLOADABLE",
+    "bytes": 21021244,
+    "sha256": "7559b8400228bbdc4a7eebecd07946c508430adae624130d6ab587a62bf42af5"
+  },
+  {
+    "file": "app/build/outputs/apk/debug/app-debug.apk",
+    "kind": "DEBUG QA APK \u2014 NOT A PLAY RELEASE",
+    "bytes": 29104555,
+    "sha256": "92c1f1d1298ad42c0472661a2593aa25b867a29c8beeeed429a6736274336e4e"
+  }
+]

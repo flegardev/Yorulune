@@ -1,0 +1,73 @@
+{
+  "debug": {
+    "path": "app\\build\\intermediates\\merged_manifests\\debug\\processDebugManifest\\AndroidManifest.xml",
+    "permissions": [
+      "android.permission.VIBRATE",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "com.aistudio.orbitproductivity.vxqpmr.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "allowBackup": "false",
+    "exported": [
+      {
+        "type": "activity",
+        "name": "com.example.qa.WidgetPreviewActivity",
+        "permission": null
+      },
+      {
+        "type": "activity",
+        "name": "com.example.MainActivity",
+        "permission": null
+      },
+      {
+        "type": "receiver",
+        "name": "com.example.widget.OrbitHomeWidgetProvider",
+        "permission": null
+      },
+      {
+        "type": "activity",
+        "name": "androidx.compose.ui.tooling.PreviewActivity",
+        "permission": null
+      },
+      {
+        "type": "activity",
+        "name": "androidx.activity.ComponentActivity",
+        "permission": null
+      },
+      {
+        "type": "receiver",
+        "name": "androidx.profileinstaller.ProfileInstallReceiver",
+        "permission": "android.permission.DUMP"
+      }
+    ],
+    "internetAbsent": true
+  },
+  "release": {
+    "path": "app\\build\\intermediates\\merged_manifests\\release\\processReleaseManifest\\AndroidManifest.xml",
+    "permissions": [
+      "android.permission.VIBRATE",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "com.aistudio.orbitproductivity.vxqpmr.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "allowBackup": "false",
+    "exported": [
+      {
+        "type": "activity",
+        "name": "com.example.MainActivity",
+        "permission": null
+      },
+      {
+        "type": "receiver",
+        "name": "com.example.widget.OrbitHomeWidgetProvider",
+        "permission": null
+      },
+      {
+        "type": "receiver",
+        "name": "androidx.profileinstaller.ProfileInstallReceiver",
+        "permission": "android.permission.DUMP"
+      }
+    ],
+    "internetAbsent": true
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-13",
+  "tests": 35,
+  "failures": 0,
+  "lint": {
+    "debug": {
+      "available": true,
+      "errors": 0,
+      "warnings": 73
+    },
+    "release": {
+      "available": true,
+      "errors": 0,
+      "warnings": 73
+    }
+  },
+  "suites": [
+    {
+      "name": "com.example.DocumentSafetyTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:16.027Z",
+      "hostname": "TINC",
+      "time": "0.026"
+    },
+    {
+      "name": "com.example.ExampleRobolectricTest",
+      "tests": "12",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:16.357Z",
+      "hostname": "TINC",
+      "time": "12.203"
+    },
+    {
+      "name": "com.example.ExampleUnitTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:28.564Z",
+      "hostname": "TINC",
+      "time": "0.076"
+    },
+    {
+      "name": "com.example.FocusDurationTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:28.641Z",
+      "hostname": "TINC",
+      "time": "0.002"
+    },
+    {
+      "name": "com.example.FocusRecoveryTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:28.647Z",
+      "hostname": "TINC",
+      "time": "7.711"
+    },
+    {
+      "name": "com.example.KissatenContrastTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:36.360Z",
+      "hostname": "TINC",
+      "time": "0.042"
+    },
+    {
+      "name": "com.example.ReleaseStorageStressTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-13T08:38:36.406Z",
+      "hostname": "TINC",
+      "time": "0.443"
+    }
+  ],
+  "cleanBuildExitCode": 0,
+  "finalBuildExitCode": 0
+}

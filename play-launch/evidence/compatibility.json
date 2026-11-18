@@ -1,0 +1,45 @@
+{
+  "applicationId": {
+    "before": "com.aistudio.orbitproductivity.vxqpmr",
+    "after": "com.aistudio.orbitproductivity.vxqpmr",
+    "preserved": true
+  },
+  "namespace": {
+    "before": "com.example",
+    "after": "com.example",
+    "preserved": true
+  },
+  "preferenceKeys": {
+    "removed": [],
+    "added": [],
+    "preserved": true
+  },
+  "actionStrings": {
+    "before": {
+      "ACTION_FIRE_REMINDER": "com.example.orbit.ACTION_FIRE_REMINDER",
+      "ACTION_COMPLETE_TASK": "com.example.orbit.ACTION_COMPLETE_TASK",
+      "ACTION_SNOOZE_TASK": "com.example.orbit.ACTION_SNOOZE_TASK",
+      "ACTION_RESCHEDULE_TOMORROW": "com.example.orbit.ACTION_RESCHEDULE_TOMORROW",
+      "ACTION_CYCLE_WIDGET_VARIANT": "com.example.orbit.ACTION_CYCLE_WIDGET_VARIANT"
+    },
+    "after": {
+      "ACTION_FIRE_REMINDER": "com.example.orbit.ACTION_FIRE_REMINDER",
+      "ACTION_COMPLETE_TASK": "com.example.orbit.ACTION_COMPLETE_TASK",
+      "ACTION_SNOOZE_TASK": "com.example.orbit.ACTION_SNOOZE_TASK",
+      "ACTION_RESCHEDULE_TOMORROW": "com.example.orbit.ACTION_RESCHEDULE_TOMORROW",
+      "ACTION_CYCLE_WIDGET_VARIANT": "com.example.orbit.ACTION_CYCLE_WIDGET_VARIANT"
+    },
+    "preserved": true
+  },
+  "roomSchemas": [
+    {
+      "file": "app/schemas/com.example.data.local.OrbitLocalDatabase/2.json",
+      "version": 2,
+      "identityHash": "25dab622851e57e68e5f990f51ae552f",
+      "unchanged": true,
+      "baselineExportPresent": false,
+      "verification": "Original compiled APK contains identical Room identity hash; source export was missing"
+    }
+  ],
+  "signingSourceUnchanged": true
+}

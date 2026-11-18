@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "serial": "emulator-5554",
+  "bytes": 16610,
+  "jsonKeys": [
+    "app",
+    "version",
+    "exportedAtEpochDay",
+    "preferences",
+    "tasks",
+    "projects",
+    "habits",
+    "focusSessions",
+    "automations"
+  ],
+  "filename": "yorulune_vault_backup_v3_2026-11-13.json",
+  "configurationRecreationDuringPicker": true,
+  "roomRowsPreserved": true,
+  "before": {
+    "orbit_local_productivity.db": {
+      "integrity": [
+        [
+          "ok"
+        ]
+      ],
+      "rows": {
+        "android_metadata": 1,
+        "tasks": 8,
+        "projects": 4,
+        "habits": 6,
+        "focus_sessions": 2,
+        "automations": 2,
+        "preferences": 1
+      },
+      "sha256": "9037f175b8acfc0623a5731d2fab685d5b5a3727299a4f842450bd9b3ff03dac"
+    }
+  },
+  "after": {
+    "orbit_local_productivity.db": {
+      "integrity": [
+        [
+          "ok"
+        ]
+      ],
+      "rows": {
+        "android_metadata": 1,
+        "tasks": 8,
+        "projects": 4,
+        "habits": 6,
+        "focus_sessions": 2,
+        "automations": 2,
+        "preferences": 1
+      },
+      "sha256": "9037f175b8acfc0623a5731d2fab685d5b5a3727299a4f842450bd9b3ff03dac"
+    }
+  },
+  "note": "Real CreateDocument/OpenDocument, fixture-only restore. Export bytes retained privately; not a store asset."
+}

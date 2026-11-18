@@ -1379,6 +1379,7 @@ private fun BackupRestoreAndTrashSection(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text("Transactional Backup Vault (JSON v3, CSV & .ICS)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    com.example.ui.PrivacyPolicyPanel()
                     Text(
                         text = "JSON exports are unencrypted. Choose a destination in the Android document picker; a provider you choose may store your file in the cloud. You can also preview and copy.",
                         style = MaterialTheme.typography.bodySmall,

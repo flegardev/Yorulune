@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "backgroundWaitSeconds": 300,
+  "serial": "emulator-5554",
+  "before": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1500,
+      "total": 1500,
+      "active": true,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": true,
+    "uptime": 95297791,
+    "boot": 6
+  },
+  "after": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1187,
+      "total": 1500,
+      "active": false,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": false,
+    "uptime": 95611142,
+    "boot": 6
+  },
+  "resumedAndPaused": {
+    "payload": {
+      "mode": "pomodoro",
+      "seconds": 1179,
+      "total": 1500,
+      "active": false,
+      "sound": "Silent",
+      "task": ""
+    },
+    "active": false,
+    "uptime": 95640661,
+    "boot": 6
+  },
+  "note": "Bounded five-minute UI start/background recovery check, force-stop, relaunch, explicit resume/pause. Original timer snapshot restored; no history records added. Reboot/disk-full/expiry notification behavior is separate.",
+  "candidateStage": "Fresh launch-clean-20261113 candidate; Fumipoka/Yorulune later received UI text-contrast-only changes. Final binary checks are separate."
+}

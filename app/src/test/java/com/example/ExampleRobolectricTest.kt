@@ -22,6 +22,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -53,11 +54,8 @@ class ExampleRobolectricTest {
         database.close()
     }
 
-    private fun fireReminderBroadcastIntent(taskId: String): Intent =
-        Intent(context, OrbitReminderReceiver::class.java).apply {
-            action = OrbitReminderScheduler.ACTION_FIRE_REMINDER
-            putExtra(OrbitReminderScheduler.EXTRA_TASK_ID, taskId)
-        }
+    private fun fireReminderBroadcastIntent(taskId: String, index: Int = 0): Intent =
+        OrbitReminderScheduler.reminderIntent(context, taskId, index)
 
     @Test
     fun `read string from context`() {
@@ -80,6 +78,50 @@ class ExampleRobolectricTest {
         assertNotNull(prefs)
         assertEquals("paper", prefs.themeMode)
         assertEquals("terracotta", prefs.accentPreset)
+    }
+
+    @Test
+    fun `hash-colliding tasks keep independent notification actions and cancellation`() {
+        org.robolectric.Shadows.shadowOf(context as android.app.Application)
+            .grantPermissions(android.Manifest.permission.POST_NOTIFICATIONS)
+        val first = OrbitTask(id = "FB", title = "Fictional notice A")
+        val second = OrbitTask(id = "Ea", title = "Fictional notice B")
+        OrbitReminderScheduler.triggerImmediateReminder(context, first, false)
+        OrbitReminderScheduler.triggerImmediateReminder(context, second, false)
+        val manager = context.getSystemService(android.app.NotificationManager::class.java)
+        val notices = manager.activeNotifications.filter { it.tag in setOf("FB", "Ea") }
+        assertEquals(setOf("FB", "Ea"), notices.map { it.tag }.toSet())
+        for (notice in notices) {
+            val action = notice.notification.actions.first().actionIntent
+            assertEquals(notice.tag, org.robolectric.Shadows.shadowOf(action).savedIntent
+                .getStringExtra(OrbitReminderScheduler.EXTRA_TASK_ID))
+        }
+        OrbitReminderScheduler.cancelTaskReminder(context, "FB")
+        assertEquals(listOf("Ea"), manager.activeNotifications.filter { it.tag in setOf("FB", "Ea") }.map { it.tag })
+    }
+
+    @Test
+    fun `hash-colliding task ids keep independent alarms`() {
+        val day = LocalDate.now().plusDays(3).toEpochDay()
+        val first = OrbitTask(id = "FB", title = "Fixture A", scheduledDateEpochDay = day,
+            scheduledStartHour = 14, multipleReminderOffsets = listOf(0))
+        val second = first.copy(id = "Ea", title = "Fixture B")
+        assertEquals(first.id.hashCode(), second.id.hashCode())
+        OrbitReminderScheduler.scheduleTaskReminder(context, first)
+        val firstAlarm = PendingIntent.getBroadcast(context,
+            OrbitReminderScheduler.requestCodeForOffset(first.id, 0), fireReminderBroadcastIntent(first.id),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)
+        OrbitReminderScheduler.scheduleTaskReminder(context, second)
+        val secondAlarm = PendingIntent.getBroadcast(context,
+            OrbitReminderScheduler.requestCodeForOffset(second.id, 0), fireReminderBroadcastIntent(second.id),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)
+        assertNotNull(firstAlarm)
+        assertNotNull(secondAlarm)
+        assertNotEquals("Task extras alone do not distinguish PendingIntents", firstAlarm, secondAlarm)
+        OrbitReminderScheduler.cancelTaskReminder(context, first.id)
+        assertNotNull("Cancelling fixture A must retain fixture B", PendingIntent.getBroadcast(context,
+            OrbitReminderScheduler.requestCodeForOffset(second.id, 0), fireReminderBroadcastIntent(second.id),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE))
     }
 
     @Test
@@ -106,7 +148,7 @@ class ExampleRobolectricTest {
             val pi = PendingIntent.getBroadcast(
                 context,
                 requestCode,
-                fireReminderBroadcastIntent(task.id),
+                fireReminderBroadcastIntent(task.id, idx),
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
             assertNotNull("Expected PendingIntent at offset index $idx to exist", pi)
@@ -121,7 +163,7 @@ class ExampleRobolectricTest {
             val stalePi = PendingIntent.getBroadcast(
                 context,
                 requestCode,
-                fireReminderBroadcastIntent(task.id),
+                fireReminderBroadcastIntent(task.id, idx),
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
             assertNull("Expected stale PendingIntent at index $idx to be cancelled on reschedule", stalePi)
@@ -134,7 +176,7 @@ class ExampleRobolectricTest {
             val cancelledPi = PendingIntent.getBroadcast(
                 context,
                 requestCode,
-                fireReminderBroadcastIntent(task.id),
+                fireReminderBroadcastIntent(task.id, idx),
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
             assertNull("Expected PendingIntent at index $idx to be null after cancelTaskReminder", cancelledPi)
@@ -232,7 +274,7 @@ class ExampleRobolectricTest {
         val bootPi = PendingIntent.getBroadcast(
             context,
             OrbitReminderScheduler.requestCodeForOffset(task.id, 0),
-            fireReminderBroadcastIntent(task.id),
+            fireReminderBroadcastIntent(task.id, 0),
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
         assertNotNull("Expected reminder PendingIntent to be restored after ACTION_BOOT_COMPLETED", bootPi)
@@ -247,7 +289,7 @@ class ExampleRobolectricTest {
         val tzPi = PendingIntent.getBroadcast(
             context,
             OrbitReminderScheduler.requestCodeForOffset(task.id, 1),
-            fireReminderBroadcastIntent(task.id),
+            fireReminderBroadcastIntent(task.id, 1),
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
         assertNotNull("Expected reminder PendingIntent to be rescheduled after ACTION_TIMEZONE_CHANGED", tzPi)

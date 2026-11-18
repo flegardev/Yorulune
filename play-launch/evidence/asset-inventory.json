@@ -1,0 +1,47 @@
+[
+  {
+    "file": "play-store/feature-1024x500.png",
+    "bytes": 19529,
+    "sha256": "a50a573a919f39f7f937aa558be9542ad9187fc61f7935676cdd4a948a3bf1a8"
+  },
+  {
+    "file": "play-store/icon-512.png",
+    "bytes": 20279,
+    "sha256": "99f847abb098f57d0500f0dc4ae01e2e2f6cd0e9c5a8d7f277f166d409b24193"
+  },
+  {
+    "file": "play-store/screenshots/phone/01-light-home.png",
+    "bytes": 206548,
+    "sha256": "70cd32decc6fa3d422ee75cb69a2cd457f5f118efa87fa0b12efaeb06cd55d6c"
+  },
+  {
+    "file": "play-store/screenshots/phone/02-tasks.png",
+    "bytes": 181858,
+    "sha256": "bb3cc3c5e68c8f72820492bbb0cde630fb30d80eb7509cf763fa7dfca62d0034"
+  },
+  {
+    "file": "play-store/screenshots/phone/03-calendar.png",
+    "bytes": 186316,
+    "sha256": "48c8188c270f341cdf910fee51b2d27536df9d33378965e6730afd177663f216"
+  },
+  {
+    "file": "play-store/screenshots/phone/04-habits.png",
+    "bytes": 196296,
+    "sha256": "88d830e0526a033250314f259d9db72615f16b488369e971dad7110e64a4429e"
+  },
+  {
+    "file": "play-store/screenshots/phone/05-focus.png",
+    "bytes": 172121,
+    "sha256": "6a6dccc023aba393d59b511e298424e5f9704285ae1788519196b90ce46213b2"
+  },
+  {
+    "file": "play-store/screenshots/phone/06-dark-home.png",
+    "bytes": 191531,
+    "sha256": "fcdf5be38bb337806aae386d69fe80e8b43f978e0ab782662e33ba32cf2f4e3f"
+  },
+  {
+    "file": "play-store/screenshots/phone/07-oled-home.png",
+    "bytes": 189957,
+    "sha256": "4eea996eab9f917b4151e44ef897976abb27bbc4054a0578786082fc2e358ca1"
+  }
+]

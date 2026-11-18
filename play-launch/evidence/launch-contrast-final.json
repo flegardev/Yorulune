@@ -1,0 +1,23 @@
+{
+  "command": [
+    "<workspace>\\orbit (1)\\gradlew.bat",
+    "--no-daemon",
+    "--no-configuration-cache",
+    "--console",
+    "plain",
+    "--max-workers=1",
+    "-I",
+    "<workspace>\\kissaten\\tools\\qa.init.gradle",
+    ":app:assembleDebug",
+    ":app:testDebugUnitTest",
+    ":app:lintDebug",
+    ":app:lintRelease",
+    ":app:assembleDebugAndroidTest",
+    ":app:bundleRelease",
+    "-PkissatenUnsignedRelease=true"
+  ],
+  "exitCode": 0,
+  "seconds": 350.6,
+  "log": "<workspace>\\kissaten\\evidence\\orbit\\launch-contrast-final.log",
+  "sourceFingerprint": "d532b5c75db99b0734cfdc9d395b2f234e18ed909cc671036d662eb3c558c976"
+}

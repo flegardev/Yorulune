@@ -11,7 +11,7 @@ android {
   compileSdk = 37
 
   defaultConfig {
-    applicationId = "com.aistudio.orbitproductivity.vxqpmr"
+    applicationId = "com.tiniflegar.yorulune"
     minSdk = 24
     targetSdk = 36
     versionCode = 1
