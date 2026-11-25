@@ -31,6 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -396,6 +398,8 @@ class OrbitReminderReceiver : BroadcastReceiver() {
     }
 
     companion object {
+        private val completionMutex = Mutex()
+
         /**
          * Suspendable entry point used by both [onReceive] in production and deterministic
          * Robolectric tests verifying notification actions, recurring task progression,
@@ -427,10 +431,11 @@ class OrbitReminderReceiver : BroadcastReceiver() {
                     }
                 }
 
-                OrbitReminderScheduler.ACTION_COMPLETE_TASK -> {
+                OrbitReminderScheduler.ACTION_COMPLETE_TASK -> completionMutex.withLock {
                     val entity = dao.getTaskById(taskId)
                     if (entity != null) {
                         val task = entity.toDomain()
+                        if (task.isCompleted || task.isTrashed || task.status == "archived") return@withLock
                         val updatedHistory = (task.historyLog + "Completed via notification/widget").takeLast(20)
                         dao.upsertTask(
                             LocalTaskEntity.fromDomain(

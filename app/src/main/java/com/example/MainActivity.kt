@@ -1,6 +1,7 @@
 package com.example
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,13 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AutoAwesomeMosaic
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Inbox
-import androidx.compose.material.icons.filled.Loop
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -72,6 +77,8 @@ import com.example.data.local.OrbitLocalRepository
 import com.example.data.model.OrbitTask
 import com.example.data.model.RestoreDuplicateStrategy
 import com.example.data.notification.OrbitReminderScheduler
+import com.example.ui.screens.DailyFocusScreen
+import com.example.ui.screens.DailyTaskScreen
 import com.example.ui.screens.FirstRunWalkthroughDialog
 import com.example.ui.screens.FocusCockpitScreen
 import com.example.ui.screens.MissionControlScreen
@@ -87,18 +94,30 @@ import androidx.compose.material3.OutlinedButton
 import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
+    private var widgetAction by mutableStateOf<String?>(null)
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        widgetAction = intent.getStringExtra(WIDGET_ACTION)
+    }
+
+    companion object {
+        const val WIDGET_ACTION = "yorulune_widget_action"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         OrbitReminderScheduler.ensureChannels(this)
         enableEdgeToEdge()
+        if (savedInstanceState == null) widgetAction = intent.getStringExtra(WIDGET_ACTION)
         setContent {
-            OrbitRootApp()
+            OrbitRootApp(widgetAction) { widgetAction = null }
         }
     }
 }
 
 @Composable
-fun OrbitRootApp() {
+fun OrbitRootApp(widgetAction: String? = null, onWidgetActionConsumed: () -> Unit = {}) {
     val orbitViewModel: OrbitViewModel = viewModel(
         factory = viewModelFactory {
             initializer {
@@ -110,7 +129,7 @@ fun OrbitRootApp() {
             }
         }
     )
-    OrbitLocalShell(viewModel = orbitViewModel)
+    OrbitLocalShell(orbitViewModel, widgetAction, onWidgetActionConsumed)
 }
 
 private data class OrbitNavItem(
@@ -119,8 +138,9 @@ private data class OrbitNavItem(
     val icon: ImageVector
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun OrbitLocalShell(viewModel: OrbitViewModel) {
+private fun OrbitLocalShell(viewModel: OrbitViewModel, widgetAction: String?, onWidgetActionConsumed: () -> Unit) {
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
 
@@ -178,6 +198,15 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
     var activeMoreSubTab by rememberSaveable { mutableStateOf("Habits & Routines") }
     var editingTask by remember { mutableStateOf<OrbitTask?>(null) }
     var showTaskModal by remember { mutableStateOf(false) }
+    var showQuickAdd by rememberSaveable { mutableStateOf(false) }
+    var taskTitle by rememberSaveable { mutableStateOf("") }
+    var showTools by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(widgetAction) {
+        if (widgetAction == "add") showQuickAdd = true
+        if (widgetAction == "focus") currentTab = "focus"
+        if (widgetAction == "today") currentTab = "home"
+        if (widgetAction != null) onWidgetActionConsumed()
+    }
     var showCommandCenter by remember { mutableStateOf(false) }
     var showWalkthrough by remember { mutableStateOf(false) }
 
@@ -282,13 +311,10 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
         }
     }
 
-    // Primary 5-tab navigation: Home | Tasks | Calendar | Habits (& Studio) | Focus
     val navItems = remember {
         listOf(
-            OrbitNavItem("home", "Home", Icons.Default.Dashboard),
-            OrbitNavItem("inbox", "Tasks", Icons.Default.Inbox),
-            OrbitNavItem("calendar", "Calendar", Icons.Default.CalendarMonth),
-            OrbitNavItem("more", "Habits", Icons.Default.Loop),
+            OrbitNavItem("home", "Today", Icons.Default.Dashboard),
+            OrbitNavItem("tasks", "Tasks", Icons.Default.Inbox),
             OrbitNavItem("focus", "Focus", Icons.Default.Timer)
         )
     }
@@ -304,8 +330,41 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
             Scaffold(
                 contentWindowInsets = WindowInsets.safeDrawing,
                 snackbarHost = { SnackbarHost(snackbarHostState) },
+                topBar = {
+                    if (!(currentTab == "focus_tools" && deepFocusZenMode)) {
+                        TopAppBar(
+                            title = { Text("Yorulune", style = MaterialTheme.typography.titleMedium) },
+                            actions = {
+                                Box {
+                                    IconButton(onClick = { showTools = true }) {
+                                        Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                                    }
+                                    DropdownMenu(expanded = showTools, onDismissRequest = { showTools = false }) {
+                                        listOf(
+                                            "Calendar" to "calendar",
+                                            "Task views" to "inbox",
+                                            "Dashboard tools" to "dashboard_tools",
+                                            "Focus options" to "focus_tools",
+                                            "Habits and projects" to "more",
+                                            "Settings" to "settings"
+                                        ).forEach { (label, route) ->
+                                            DropdownMenuItem(text = { Text(label) }, onClick = {
+                                                showTools = false
+                                                when (route) {
+                                                    "inbox" -> handleNavigateDestination("all_tasks")
+                                                    "dashboard_tools", "focus_tools" -> currentTab = route
+                                                    else -> handleNavigateDestination(route)
+                                                }
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                },
                 bottomBar = {
-                    if (!isWideScreen && !(currentTab == "focus" && deepFocusZenMode)) {
+                    if (!isWideScreen && !(currentTab == "focus_tools" && deepFocusZenMode)) {
                         NavigationBar {
                             navItems.forEach { item ->
                                 NavigationBarItem(
@@ -320,11 +379,10 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                     }
                 },
                 floatingActionButton = {
-                    if (!(currentTab == "focus" && deepFocusZenMode)) {
+                    if (currentTab == "home" || currentTab == "tasks") {
                         FloatingActionButton(
                             onClick = {
-                                editingTask = null
-                                showTaskModal = true
+                                showQuickAdd = true
                             },
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -340,7 +398,7 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                         .fillMaxSize()
                         .padding(innerPadding)
                 ) {
-                    if (isWideScreen && !(currentTab == "focus" && deepFocusZenMode)) {
+                    if (isWideScreen && !(currentTab == "focus_tools" && deepFocusZenMode)) {
                         NavigationRail {
                             navItems.forEach { item ->
                                 NavigationRailItem(
@@ -350,21 +408,20 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                                     label = { Text(item.label) }
                                 )
                             }
-                            NavigationRailItem(
-                                selected = currentTab == "more" && activeMoreSubTab == "Widget Gallery",
-                                onClick = {
-                                    activeMoreSubTab = "Widget Gallery"
-                                    currentTab = "more"
-                                },
-                                icon = { Icon(Icons.Default.AutoAwesomeMosaic, contentDescription = "Widgets") },
-                                label = { Text("Widgets") }
-                            )
+
                         }
                     }
 
                     Box(modifier = Modifier.weight(1f)) {
                         when (currentTab) {
-                            "home" -> MissionControlScreen(
+                            "home", "tasks" -> DailyTaskScreen(
+                                showAll = currentTab == "tasks",
+                                tasks = tasks,
+                                onSelect = { task -> editingTask = task; showTaskModal = true },
+                                onToggle = viewModel::toggleTaskCompletion,
+                                onFocus = { currentTab = "focus" }
+                            )
+                            "dashboard_tools" -> MissionControlScreen(
                                 tasks = tasks,
                                 projects = projects,
                                 habits = habits,
@@ -401,7 +458,6 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                                     viewModel.updatePreferences { it.copy(energyFilter = e) }
                                 },
                                 onUpdatePreferences = { transform -> viewModel.updatePreferences(transform) },
-                                onResetSeed = { viewModel.resetSeedData() },
                                 onOpenCommandCenter = { showCommandCenter = true },
                                 onNavigateToScreen = handleNavigateDestination
                             )
@@ -451,7 +507,16 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                                     )
                                 }
                             )
-                            "focus" -> FocusCockpitScreen(
+                            "focus" -> DailyFocusScreen(
+                                running = timerRunning,
+                                seconds = timerSecondsRemaining,
+                                total = timerTotalSeconds,
+                                taskTitle = activeFocusTask?.title,
+                                onDuration = { minutes -> viewModel.selectFocusMode("pomodoro", minutes) },
+                                onToggle = viewModel::startOrPauseTimer,
+                                onFinish = viewModel::completeFocusSession
+                            )
+                            "focus_tools" -> FocusCockpitScreen(
                                 openTasks = tasks.filter { !it.isCompleted && !it.isTrashed },
                                 focusSessions = focusSessions,
                                 timerRunning = timerRunning,
@@ -497,9 +562,6 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                                 onToggleWidget = { w -> viewModel.toggleWidgetVisibility(w) },
                                 onToggleFavoriteWidget = { w -> viewModel.toggleFavoriteWidget(w) },
                                 onSetWidgetSize = { w, sz -> viewModel.setWidgetSize(w, sz) },
-                                onSetHomeWidgetVariant = { variant ->
-                                    viewModel.setHomeWidgetVariant(variant)
-                                },
                                 onMoveWidget = { w, up -> viewModel.moveWidgetOrder(w, up) },
                                 onApplyPreset = { p -> viewModel.applyDashboardPreset(p) },
                                 onUpdatePreferences = { transform -> viewModel.updatePreferences(transform) },
@@ -525,7 +587,6 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                                 },
                                 onRestoreTaskFromTrash = { t -> viewModel.restoreFromTrash(t) },
                                 onEmptyTrash = { viewModel.emptyTrashBin() },
-                                onResetSeed = { viewModel.resetSeedData() },
                                 onRequestNotificationPermission = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                         notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -537,6 +598,37 @@ private fun OrbitLocalShell(viewModel: OrbitViewModel) {
                         }
                     }
                 }
+            }
+
+            if (showQuickAdd) {
+                AlertDialog(
+                    onDismissRequest = { showQuickAdd = false },
+                    title = { Text("Add task") },
+                    text = {
+                        OutlinedTextField(
+                            value = taskTitle,
+                            onValueChange = { taskTitle = it },
+                            label = { Text("Title") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    confirmButton = {
+                        Button(enabled = taskTitle.isNotBlank(), onClick = {
+                            viewModel.saveFullTask(OrbitTask(
+                                title = taskTitle.trim(),
+                                projectId = "",
+                                projectName = "",
+                                estimatedMinutes = 0
+                            ))
+                            taskTitle = ""
+                            showQuickAdd = false
+                        }) { Text("Add task") }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { taskTitle = ""; showQuickAdd = false }) { Text("Cancel") }
+                    }
+                )
             }
 
             if (showTaskModal) {

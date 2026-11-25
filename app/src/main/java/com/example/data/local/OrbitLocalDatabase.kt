@@ -380,7 +380,7 @@ data class LocalPreferencesEntity(
     val quietHoursEnabled: Boolean = false,
     val quietHoursStartHour: Int = 22,
     val quietHoursEndHour: Int = 7,
-    val gamificationEnabled: Boolean = true,
+    val gamificationEnabled: Boolean = false,
     val enabledWidgetsJoined: String = UserPreferencesDoc.defaultWidgetOrder().joinToString(","),
     val favoriteWidgetsJoined: String = "today,habit,progress_ring,focus,mini_calendar",
     val widgetSizesJson: String = "{}",
@@ -394,7 +394,7 @@ data class LocalPreferencesEntity(
     val defaultPomodoroMinutes: Int = 25,
     val defaultBreakMinutes: Int = 5,
     val defaultLongBreakMinutes: Int = 15,
-    val dailyFocusGoalMinutes: Int = 120,
+    val dailyFocusGoalMinutes: Int = 0,
     val ambientVolume: Float = 0.7f,
     val webDavUrl: String = "",
     val quickNotes: String = "• Capture ideas in 2 seconds\n• Review weekly milestones every Friday\n• 100% Free & Offline-First"
@@ -659,27 +659,7 @@ interface OrbitDao {
         return insertedCount
     }
 
-    @Transaction
-    suspend fun resetAndSeedWorkspaceTransaction(
-        tasks: List<LocalTaskEntity>,
-        projects: List<LocalProjectEntity>,
-        habits: List<LocalHabitEntity>,
-        sessions: List<LocalFocusSessionEntity>,
-        automations: List<LocalAutomationEntity>,
-        preferences: LocalPreferencesEntity
-    ) {
-        clearAllTasks()
-        clearAllProjects()
-        clearAllHabits()
-        clearAllFocusSessions()
-        clearAllAutomations()
-        upsertProjects(projects)
-        upsertTasks(tasks)
-        upsertHabits(habits)
-        upsertFocusSessions(sessions)
-        upsertAutomations(automations)
-        upsertPreferences(preferences)
-    }
+
 }
 
 @Database(
@@ -863,392 +843,6 @@ class OrbitLocalRepository(
         appContext?.let { OrbitHomeWidgetProvider.requestUpdate(it) }
     }
 
-    suspend fun seedStarterWorkspaceIfEmpty() {
-        val currentTasks = dao.getAllTasksOnce()
-        val currentHabits = dao.getAllHabitsOnce()
-        if (currentTasks.isNotEmpty() || currentHabits.isNotEmpty() ||
-            dao.getAllProjectsOnce().isNotEmpty() || dao.getPreferencesOnce() != null) return
-        resetToStarterSeed(preservePreferences = true)
-    }
-
-    /**
-     * Resets or seeds the starter workspace atomically inside a Room @Transaction.
-     * Includes the habits from the reference design (Morning meditation, Drink 8 glasses of water,
-     * Read 30 minutes, Call a friend, Go for a run, Write in journal) plus rich tasks & projects.
-     */
-    suspend fun resetToStarterSeed(preservePreferences: Boolean = false) {
-        val today = LocalDate.now().toEpochDay()
-        val currentPrefs = if (preservePreferences) dao.getPreferencesOnce() else null
-
-        val starterProjects = listOf(
-            OrbitProject(
-                id = "proj_work",
-                name = "Product & Engineering",
-                description = "Core roadmap, architecture & sprint deliverables",
-                colorHex = "#C86D51",
-                iconName = "rocket",
-                category = "work",
-                isShared = true,
-                members = listOf("You", "Sarah Chen", "Alex Rivera")
-            ),
-            OrbitProject(
-                id = "proj_personal",
-                name = "Life & Wellness",
-                description = "Health, mindfulness, reading & personal growth",
-                colorHex = "#5F8D75",
-                iconName = "heart",
-                category = "health",
-                isShared = false,
-                members = listOf("You")
-            ),
-            OrbitProject(
-                id = "proj_household",
-                name = "Household & Shopping",
-                description = "Groceries, bills, birthdays & home maintenance",
-                colorHex = "#B07D62",
-                iconName = "home",
-                category = "shopping",
-                isShared = true,
-                members = listOf("You", "Sam", "Jamie")
-            ),
-            OrbitProject(
-                id = "proj_learning",
-                name = "Study & Mastery",
-                description = "Courses, books & skill acquisition",
-                colorHex = "#4A8BB2",
-                iconName = "school",
-                category = "education",
-                isShared = false,
-                members = listOf("You")
-            )
-        )
-
-        val starterTasks = listOf(
-            OrbitTask(
-                id = "task_arch_roadmap",
-                title = "Finalize Q4 System Architecture & Release Checklist",
-                description = "Review performance benchmarks, offline Room SQLite migrations, and accessibility audit.",
-                status = "in_progress",
-                priority = "p1",
-                projectId = "proj_work",
-                projectName = "Product & Engineering",
-                sectionName = "Architecture",
-                tags = listOf("deepwork", "architecture", "release"),
-                startDateEpochDay = today - 1,
-                dueDateEpochDay = today,
-                deadlineEpochDay = today + 1,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 9,
-                scheduledStartMinute = 30,
-                estimatedMinutes = 50,
-                actualMinutes = 25,
-                energyLevel = "high",
-                reminderOffsetMinutes = 15,
-                multipleReminderOffsets = listOf(0, 15, 60),
-                reminderEscalation = "critical",
-                isFavorite = true,
-                isImportant = true,
-                isUrgent = true,
-                isPinned = true,
-                subtasks = listOf(
-                    "1|Verify offline-first Room SQLite persistence & Migration(1, 2)",
-                    "1|Audit all 30 customizable dashboard widgets & 10 OS widgets",
-                    "0|Export ICS calendar & JSON backup vault"
-                ),
-                comments = listOf("Completed initial database schema benchmark in 4ms."),
-                historyLog = listOf("Created in Product & Engineering", "Pinned to top of Today")
-            ),
-            OrbitTask(
-                id = "task_design_polish",
-                title = "Polish Editorial Paper, Dark & True OLED Themes",
-                description = "Ensure all 22 screens and 30 widgets adapt cleanly to Airy, Comfortable, and Compact density.",
-                status = "todo",
-                priority = "p2",
-                projectId = "proj_work",
-                projectName = "Product & Engineering",
-                sectionName = "Design System",
-                tags = listOf("design", "ui"),
-                dueDateEpochDay = today,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 14,
-                scheduledStartMinute = 0,
-                estimatedMinutes = 40,
-                energyLevel = "medium",
-                reminderOffsetMinutes = 15,
-                reminderEscalation = "persistent",
-                isFavorite = true,
-                isImportant = true,
-                isUrgent = false,
-                subtasks = listOf(
-                    "1|Verify WCAG contrast ratios in Paper, Dark & OLED modes",
-                    "0|Test reduced-motion accessibility toggle"
-                )
-            ),
-            OrbitTask(
-                id = "task_run_mobility",
-                title = "Evening 5K Run & 15-Minute Mobility Routine",
-                description = "Zone 2 outdoor run followed by hip & shoulder stretching.",
-                status = "todo",
-                priority = "p2",
-                projectId = "proj_personal",
-                projectName = "Life & Wellness",
-                sectionName = "Fitness",
-                tags = listOf("health", "running"),
-                dueDateEpochDay = today,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 17,
-                scheduledStartMinute = 30,
-                estimatedMinutes = 45,
-                energyLevel = "high",
-                recurrenceRule = "WEEKDAYS",
-                isImportant = true,
-                isUrgent = false
-            ),
-            OrbitTask(
-                id = "task_grocery_run",
-                title = "Weekly Organic Produce, Oat Milk & Espresso Run",
-                description = "Auto-grouped shopping list items for the household.",
-                status = "inbox",
-                priority = "p3",
-                projectId = "proj_household",
-                projectName = "Household & Shopping",
-                sectionName = "Groceries",
-                tags = listOf("shopping", "errands"),
-                dueDateEpochDay = today,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 18,
-                scheduledStartMinute = 30,
-                estimatedMinutes = 25,
-                energyLevel = "low",
-                locationTrigger = "Arriving: Local Market",
-                isUrgent = true,
-                subtasks = listOf(
-                    "0|Produce: Hass avocados (4x), baby spinach, blueberries",
-                    "0|Dairy & Plant: Barista oat milk (2 cartons)",
-                    "0|Pantry: Whole-bean Ethiopian espresso (500g)"
-                )
-            ),
-            OrbitTask(
-                id = "task_birthday_mom",
-                title = "Mom's Birthday — Order Flowers & Call",
-                description = "Annual birthday reminder with early 1-day notification.",
-                status = "todo",
-                priority = "p1",
-                projectId = "proj_personal",
-                projectName = "Life & Wellness",
-                sectionName = "Celebrations",
-                tags = listOf("birthday", "family"),
-                dueDateEpochDay = today + 2,
-                deadlineEpochDay = today + 2,
-                scheduledDateEpochDay = today + 2,
-                scheduledStartHour = 10,
-                scheduledStartMinute = 0,
-                estimatedMinutes = 20,
-                recurrenceRule = "YEARLY",
-                assigneeName = "Birthday",
-                isFavorite = true,
-                isImportant = true
-            ),
-            OrbitTask(
-                id = "task_bill_rent",
-                title = "Pay Monthly Rent & Fiber Internet Bill",
-                description = "Recurring monthly bill payment reminder.",
-                status = "todo",
-                priority = "p1",
-                projectId = "proj_household",
-                projectName = "Household & Shopping",
-                sectionName = "Bills & Finance",
-                tags = listOf("bills", "finance"),
-                dueDateEpochDay = today + 1,
-                deadlineEpochDay = today + 1,
-                scheduledDateEpochDay = today + 1,
-                scheduledStartHour = 11,
-                scheduledStartMinute = 0,
-                estimatedMinutes = 15,
-                recurrenceRule = "MONTHLY",
-                assigneeName = "Bill",
-                isImportant = true,
-                isUrgent = true
-            ),
-            OrbitTask(
-                id = "task_medication_vitamins",
-                title = "Take Morning Vitamin D3, Omega-3 & Magnesium",
-                description = "Daily health & medication reminder.",
-                status = "todo",
-                priority = "p2",
-                projectId = "proj_personal",
-                projectName = "Life & Wellness",
-                sectionName = "Medication",
-                tags = listOf("medication", "health"),
-                dueDateEpochDay = today,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 8,
-                scheduledStartMinute = 0,
-                estimatedMinutes = 5,
-                recurrenceRule = "DAILY",
-                assigneeName = "Medication",
-                isImportant = true
-            ),
-            OrbitTask(
-                id = "task_overdue_taxes",
-                title = "Organize Quarterly Expense Receipts & Backup Vault",
-                description = "Past-due administrative task ready for 1-tap rescheduling.",
-                status = "todo",
-                priority = "p2",
-                projectId = "proj_household",
-                projectName = "Household & Shopping",
-                sectionName = "Finance",
-                tags = listOf("finance", "admin"),
-                dueDateEpochDay = today - 1,
-                scheduledDateEpochDay = today,
-                scheduledStartHour = 16,
-                scheduledStartMinute = 0,
-                estimatedMinutes = 35,
-                postponeCount = 2,
-                isImportant = true,
-                isUrgent = true
-            )
-        )
-
-        // Habits matching the user's reference image (TODAY vs NOT TODAY with streaks and 7/7 rings)
-        val starterHabits = listOf(
-            OrbitHabit(
-                id = "habit_meditation",
-                title = "Morning meditation",
-                description = "10 minutes of mindful breathing before opening screens",
-                routineType = "morning",
-                category = "mindfulness",
-                frequencyLabel = "Daily",
-                targetDaysPerWeek = 7,
-                currentStreak = 48,
-                bestStreak = 64,
-                streakFreezesRemaining = 2,
-                completedEpochDays = (0L..6L).map { today - it }, // Completed today! (1 of 4 today -> 25%)
-                reminderTime = "07:00"
-            ),
-            OrbitHabit(
-                id = "habit_hydration",
-                title = "Drink 8 glasses of water",
-                description = "Stay hydrated throughout the workday",
-                routineType = "morning",
-                category = "health",
-                frequencyLabel = "Daily",
-                targetDaysPerWeek = 7,
-                currentStreak = 1,
-                bestStreak = 21,
-                streakFreezesRemaining = 2,
-                completedEpochDays = listOf(today - 1, today - 2, today - 4, today - 5), // 4/7
-                reminderTime = "09:00"
-            ),
-            OrbitHabit(
-                id = "habit_reading",
-                title = "Read 30 minutes",
-                description = "Evening non-fiction or literature reading ritual",
-                routineType = "evening",
-                category = "personal",
-                frequencyLabel = "Daily",
-                targetDaysPerWeek = 7,
-                currentStreak = 0,
-                bestStreak = 18,
-                streakFreezesRemaining = 2,
-                completedEpochDays = listOf(today - 2, today - 3, today - 5, today - 6), // 4/7
-                reminderTime = "21:30"
-            ),
-            OrbitHabit(
-                id = "habit_call_friend",
-                title = "Call a friend",
-                description = "Stay connected with close friends and family",
-                routineType = "anytime",
-                category = "social",
-                frequencyLabel = "Daily",
-                targetDaysPerWeek = 2,
-                currentStreak = 0,
-                bestStreak = 9,
-                streakFreezesRemaining = 2,
-                completedEpochDays = emptyList(), // 0/2
-                reminderTime = "18:00"
-            ),
-            OrbitHabit(
-                id = "habit_run",
-                title = "Go for a run",
-                description = "Outdoor 5K aerobic conditioning",
-                routineType = "morning",
-                category = "health",
-                frequencyLabel = "Tue · Thu · Sat",
-                targetDaysPerWeek = 3,
-                currentStreak = 6,
-                bestStreak = 15,
-                streakFreezesRemaining = 2,
-                completedEpochDays = listOf(today - 1, today - 3, today - 5),
-                reminderTime = "07:30"
-            ),
-            OrbitHabit(
-                id = "habit_journal",
-                title = "Write in journal",
-                description = " Evening reflection and gratitude log",
-                routineType = "evening",
-                category = "mindfulness",
-                frequencyLabel = "Weekdays",
-                targetDaysPerWeek = 5,
-                currentStreak = 12,
-                bestStreak = 30,
-                streakFreezesRemaining = 2,
-                completedEpochDays = listOf(today - 1, today - 2, today - 3, today - 4),
-                reminderTime = "21:00"
-            )
-        )
-
-        val starterSessions = listOf(
-            LocalFocusSessionEntity(
-                id = "focus_seed_1",
-                taskId = "task_arch_roadmap",
-                taskTitle = "Finalize Q4 System Architecture",
-                mode = "pomodoro",
-                durationMinutes = 25,
-                ambientSound = "Cosmic Rain",
-                completedEpochDay = today
-            ),
-            LocalFocusSessionEntity(
-                id = "focus_seed_2",
-                taskId = "task_design_polish",
-                taskTitle = "Polish Editorial Paper & OLED Themes",
-                mode = "deep_work",
-                durationMinutes = 50,
-                ambientSound = "Deep Space Brown",
-                completedEpochDay = today - 1
-            )
-        )
-
-        val starterAutomations = listOf(
-            AutomationRule(
-                id = "auto_unlock_deps",
-                title = "Auto-Unlock Dependent Tasks",
-                triggerType = "When a task is marked Completed",
-                conditionText = "Another task depends on its ID",
-                actionType = "Unlock dependent task & schedule for Today",
-                isEnabled = true
-            ),
-            AutomationRule(
-                id = "auto_recurring_regen",
-                title = "Deterministic Recurring Generator",
-                triggerType = "When a recurring task is completed",
-                conditionText = "Recurrence rule is DAILY, WEEKDAYS, WEEKLY, MONTHLY, YEARLY, or AFTER_COMPLETION",
-                actionType = "Generate next occurrence automatically",
-                isEnabled = true
-            )
-        )
-
-        dao.resetAndSeedWorkspaceTransaction(
-            tasks = starterTasks.map { LocalTaskEntity.fromDomain(it) },
-            projects = starterProjects.map { LocalProjectEntity.fromDomain(it) },
-            habits = starterHabits.map { LocalHabitEntity.fromDomain(it) },
-            sessions = starterSessions,
-            automations = starterAutomations.map { LocalAutomationEntity.fromDomain(it) },
-            preferences = currentPrefs ?: LocalPreferencesEntity()
-        )
-        refreshHomeWidget()
-    }
-
     // --- TRANSACTIONAL FULL BACKUP, EXPORT & IMPORT (JSON, CSV, ICS) ---
 
     suspend fun exportFullBackupJson(): String {
@@ -1274,6 +868,7 @@ class OrbitLocalRepository(
                 put("quietHoursStartHour", prefs.quietHoursStartHour)
                 put("quietHoursEndHour", prefs.quietHoursEndHour)
                 put("gamificationEnabled", prefs.gamificationEnabled)
+                put("dailyFocusGoalMinutes", prefs.dailyFocusGoalMinutes)
                 put("enabledWidgets", JSONArray(prefs.enabledWidgets))
                 put("favoriteWidgets", JSONArray(prefs.favoriteWidgets))
                 put("homeWidgetVariant", prefs.homeWidgetVariant)
@@ -1667,6 +1262,10 @@ class OrbitLocalRepository(
                     cornerRadiusDp = prefsObj.optInt("cornerRadiusDp", currentPrefs.cornerRadiusDp),
                     dashboardPreset = prefsObj.optString("dashboardPreset", currentPrefs.dashboardPreset),
                     quietHoursEnabled = prefsObj.optBoolean("quietHoursEnabled", currentPrefs.quietHoursEnabled),
+                    quietHoursStartHour = prefsObj.optInt("quietHoursStartHour", currentPrefs.quietHoursStartHour).coerceIn(0, 23),
+                    quietHoursEndHour = prefsObj.optInt("quietHoursEndHour", currentPrefs.quietHoursEndHour).coerceIn(0, 23),
+                    gamificationEnabled = prefsObj.optBoolean("gamificationEnabled", currentPrefs.gamificationEnabled),
+                    dailyFocusGoalMinutes = prefsObj.optInt("dailyFocusGoalMinutes", currentPrefs.dailyFocusGoalMinutes).coerceIn(0, 1440),
                     enabledWidgets = if (widgetsList.isEmpty()) currentPrefs.enabledWidgets else widgetsList,
                     favoriteWidgets = if (favWidgetsList.isEmpty()) currentPrefs.favoriteWidgets else favWidgetsList,
                     widgetSizes = if (sizesMap.isEmpty()) currentPrefs.widgetSizes else sizesMap,

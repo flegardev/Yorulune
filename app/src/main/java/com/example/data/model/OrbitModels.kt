@@ -62,8 +62,8 @@ data class OrbitTask(
     val actualMinutes: Int = 0,
     val energyLevel: String = "medium", // low, medium, high
     val recurrenceRule: String = "", // "", DAILY, WEEKDAYS, WEEKENDS, WEEKLY, MONTHLY, YEARLY, EVERY_3_DAYS, AFTER_COMPLETION, DAYS_MON_WED_FRI, DAYS_TUE_THU_SAT
-    val reminderOffsetMinutes: Int = 15, // Primary reminder offset (-1 if none, 0 at time, 15, 30, 60, 1440)
-    val multipleReminderOffsets: List<Int> = listOf(15), // Multiple reminders per task
+    val reminderOffsetMinutes: Int = -1, // Primary reminder offset (-1 if none, 0 at time, 15, 30, 60, 1440)
+    val multipleReminderOffsets: List<Int> = emptyList(), // Multiple reminders per task
     val reminderEscalation: String = "standard", // standard, persistent, critical
     val locationTrigger: String = "",
     val postponeCount: Int = 0,
@@ -215,7 +215,7 @@ data class UserPreferencesDoc(
     val quietHoursEnabled: Boolean = false,
     val quietHoursStartHour: Int = 22,
     val quietHoursEndHour: Int = 7,
-    val gamificationEnabled: Boolean = true,
+    val gamificationEnabled: Boolean = false,
     val enabledWidgets: List<String> = defaultWidgetOrder(),
     val favoriteWidgets: List<String> = listOf("today", "habit", "progress_ring", "focus", "mini_calendar"),
     val widgetSizes: Map<String, String> = emptyMap(), // widgetKey -> Compact, Medium, Large, Full
@@ -229,7 +229,7 @@ data class UserPreferencesDoc(
     val defaultPomodoroMinutes: Int = 25,
     val defaultBreakMinutes: Int = 5,
     val defaultLongBreakMinutes: Int = 15,
-    val dailyFocusGoalMinutes: Int = 120,
+    val dailyFocusGoalMinutes: Int = 0,
     val ambientVolume: Float = 0.7f,
     val webDavUrl: String = "",
     val quickNotes: String = "• Capture ideas in 2 seconds\n• Review weekly milestones every Friday\n• 100% Free & Offline-First",
@@ -317,7 +317,7 @@ enum class OrbitScreenDestination(
     SHOPPING_LISTS("shopping_lists", "Shopping Lists 2.0", "Auto-grouped aisles, quantities & text export", "Life"),
     ROUTINES("routines", "Routines", "Morning, evening & recurring step checklists", "Habits"),
     SETTINGS("settings", "Settings", "Formats, shortcuts, accessibility & timers", "System"),
-    BACKUP_RESTORE("backup_restore", "Backup Vault & Restore", "Transactional JSON, CSV, ICS & seed reset", "System");
+    BACKUP_RESTORE("backup_restore", "Backup Vault & Restore", "Local JSON, CSV and calendar files", "System");
 
     companion object {
         fun fromRoute(route: String): OrbitScreenDestination =

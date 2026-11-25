@@ -64,20 +64,15 @@ class ExampleRobolectricTest {
     }
 
     @Test
-    fun `seed workspace persists tasks habits projects and preferences`() = runBlocking {
-        repository.seedStarterWorkspaceIfEmpty()
-
-        val tasks = repository.observeTasks().first()
-        val habits = repository.observeHabits().first()
-        val projects = repository.observeProjects().first()
-        val prefs = repository.observePreferences().first()
-
-        assertTrue("Expected seeded tasks", tasks.isNotEmpty())
-        assertEquals("Expected 6 starter habits matching design", 6, habits.size)
-        assertTrue("Expected starter projects", projects.size >= 4)
-        assertNotNull(prefs)
-        assertEquals("paper", prefs.themeMode)
-        assertEquals("terracotta", prefs.accentPreset)
+    fun `fresh workspace has no user records or focus goal`() = runBlocking {
+        val dao = database.orbitDao()
+        assertTrue(dao.getAllTasksOnce().isEmpty())
+        assertTrue(dao.getAllHabitsOnce().isEmpty())
+        assertTrue(dao.getAllProjectsOnce().isEmpty())
+        assertTrue(dao.getAllFocusSessionsOnce().isEmpty())
+        assertTrue(dao.getAllAutomationsOnce().isEmpty())
+        assertNull(dao.getPreferencesOnce())
+        assertEquals(0, repository.observePreferences().first().dailyFocusGoalMinutes)
     }
 
     @Test
@@ -218,6 +213,12 @@ class ExampleRobolectricTest {
             todayEpochDay = today
         )
 
+        OrbitReminderReceiver.handleIntentSuspend(
+            context = context,
+            intent = completeIntent,
+            daoOverride = database.orbitDao(),
+            todayEpochDay = today
+        )
         val allAfterComplete = repository.observeTasks().first()
         val completedOriginal = allAfterComplete.first { it.id == "prereq_rec" }
         assertTrue("Original prerequisite task should be marked done", completedOriginal.isCompleted)
@@ -227,6 +228,7 @@ class ExampleRobolectricTest {
         }
         assertNotNull("Completing daily recurring task must spawn next occurrence", spawnedRecurring)
         assertEquals(today + 1, spawnedRecurring?.dueDateEpochDay)
+        assertEquals(1, allAfterComplete.count { it.id != prereqTask.id && it.title == prereqTask.title })
 
         val unlockedDependent = allAfterComplete.first { it.id == "dep_task_1" }
         assertEquals("todo", unlockedDependent.status)
@@ -309,7 +311,7 @@ class ExampleRobolectricTest {
 
     @Test
     fun `backup inspection duplicate handling strategies and ics round trip work atomically`() = runBlocking {
-        repository.seedStarterWorkspaceIfEmpty()
+        repository.upsertTask(OrbitTask(id = "backup-task", title = "Backup fixture", dueDateEpochDay = LocalDate.now().toEpochDay())).getOrThrow()
         val initialTasks = repository.observeTasks().first()
         val exportedJson = repository.exportFullBackupJson()
 
@@ -509,7 +511,6 @@ class ExampleRobolectricTest {
 
     @Test
     fun `home widget variant updates preferences and cycles via broadcast`() = runBlocking {
-        repository.seedStarterWorkspaceIfEmpty()
         val initialPrefs = repository.observePreferences().first()
         repository.savePreferences(
             initialPrefs.copy(homeWidgetVariant = NativeHomeWidgetVariant.HABIT_PROGRESS.key)

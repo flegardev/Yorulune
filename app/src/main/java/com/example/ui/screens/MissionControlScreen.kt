@@ -149,7 +149,6 @@ fun MissionControlScreen(
     onUpdateNotes: (String) -> Unit,
     onSelectEnergyFilter: (String) -> Unit,
     onUpdatePreferences: ((UserPreferencesDoc) -> UserPreferencesDoc) -> Unit = {},
-    onResetSeed: () -> Unit = {},
     onOpenCommandCenter: () -> Unit,
     onNavigateToScreen: (String) -> Unit
 ) {
@@ -572,25 +571,6 @@ fun MissionControlScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column {
-                                    Text("DATA", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Surface(
-                                        color = MaterialTheme.colorScheme.surfaceVariant,
-                                        shape = RoundedCornerShape(10.dp),
-                                        modifier = Modifier
-                                            .clickable { onResetSeed() }
-                                            .testTag("tweaks_reset_seed_button")
-                                    ) {
-                                        Text(
-                                            text = "Reset seed",
-                                            style = MaterialTheme.typography.labelLarge,
-                                            color = MaterialTheme.colorScheme.onSurface,
-                                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
-                                        )
-                                    }
-                                }
-
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text("LAYOUT PRESET", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     Spacer(modifier = Modifier.height(4.dp))
@@ -918,11 +898,11 @@ fun MissionControlScreen(
                 OrbitWidgetType.PROGRESS_RING -> {
                     DailyOrbitRingWidget(
                         completedCount = completedTasks.size,
-                        totalCount = (completedTasks.size + openTasks.size).coerceAtLeast(1),
+                        totalCount = completedTasks.size + openTasks.size,
                         focusMinutes = totalFocusMinutes,
-                        focusGoalMinutes = preferences.dailyFocusGoalMinutes.coerceAtLeast(30),
+                        focusGoalMinutes = preferences.dailyFocusGoalMinutes,
                         habitsDoneToday = habits.count { it.isCompletedOn(todayEpoch) },
-                        habitsTotal = habits.size.coerceAtLeast(1),
+                        habitsTotal = habits.size,
                         plannedMinutesToday = todayTasks.sumOf { it.estimatedMinutes }
                     )
                 }
@@ -1257,9 +1237,9 @@ private fun DailyOrbitRingWidget(
     habitsTotal: Int,
     plannedMinutesToday: Int
 ) {
-    val taskRatio = (completedCount.toFloat() / totalCount.toFloat()).coerceIn(0f, 1f)
-    val focusRatio = (focusMinutes.toFloat() / focusGoalMinutes.toFloat()).coerceIn(0f, 1f)
-    val habitRatio = (habitsDoneToday.toFloat() / habitsTotal.toFloat()).coerceIn(0f, 1f)
+    val taskRatio = if (totalCount > 0) (completedCount.toFloat() / totalCount).coerceIn(0f, 1f) else 0f
+    val focusRatio = if (focusGoalMinutes > 0) (focusMinutes.toFloat() / focusGoalMinutes).coerceIn(0f, 1f) else 0f
+    val habitRatio = if (habitsTotal > 0) (habitsDoneToday.toFloat() / habitsTotal).coerceIn(0f, 1f) else 0f
     val isOverloaded = plannedMinutesToday > 360
 
     Card(
@@ -1295,25 +1275,27 @@ private fun DailyOrbitRingWidget(
                             style = Stroke(width = stroke, cap = StrokeCap.Round)
                         )
 
-                        val midInset = gap
-                        drawArc(
-                            color = OrbitCyan.copy(alpha = 0.2f),
-                            startAngle = -90f,
-                            sweepAngle = 360f,
-                            useCenter = false,
-                            topLeft = androidx.compose.ui.geometry.Offset(midInset, midInset),
-                            size = androidx.compose.ui.geometry.Size(size.width - midInset * 2, size.height - midInset * 2),
-                            style = Stroke(width = stroke, cap = StrokeCap.Round)
-                        )
-                        drawArc(
-                            color = OrbitCyan,
-                            startAngle = -90f,
-                            sweepAngle = 360f * focusRatio,
-                            useCenter = false,
-                            topLeft = androidx.compose.ui.geometry.Offset(midInset, midInset),
-                            size = androidx.compose.ui.geometry.Size(size.width - midInset * 2, size.height - midInset * 2),
-                            style = Stroke(width = stroke, cap = StrokeCap.Round)
-                        )
+                        if (focusGoalMinutes > 0) {
+                            val midInset = gap
+                            drawArc(
+                                color = OrbitCyan.copy(alpha = 0.2f),
+                                startAngle = -90f,
+                                sweepAngle = 360f,
+                                useCenter = false,
+                                topLeft = androidx.compose.ui.geometry.Offset(midInset, midInset),
+                                size = androidx.compose.ui.geometry.Size(size.width - midInset * 2, size.height - midInset * 2),
+                                style = Stroke(width = stroke, cap = StrokeCap.Round)
+                            )
+                            drawArc(
+                                color = OrbitCyan,
+                                startAngle = -90f,
+                                sweepAngle = 360f * focusRatio,
+                                useCenter = false,
+                                topLeft = androidx.compose.ui.geometry.Offset(midInset, midInset),
+                                size = androidx.compose.ui.geometry.Size(size.width - midInset * 2, size.height - midInset * 2),
+                                style = Stroke(width = stroke, cap = StrokeCap.Round)
+                            )
+                        }
 
                         val inInset = gap * 2
                         drawArc(
@@ -1354,7 +1336,7 @@ private fun DailyOrbitRingWidget(
                         fontWeight = FontWeight.Bold
                     )
                     MetricLegendRow(color = OrbitIndigo, label = "Tasks Completed", value = "$completedCount / $totalCount")
-                    MetricLegendRow(color = OrbitCyan, label = "Focus Logged", value = "${focusMinutes}m / ${focusGoalMinutes}m")
+                    MetricLegendRow(color = OrbitCyan, label = "Focus Logged", value = if (focusGoalMinutes > 0) "${focusMinutes}m / ${focusGoalMinutes}m" else "${focusMinutes}m")
                     MetricLegendRow(color = OrbitEmerald, label = "Daily Habits", value = "$habitsDoneToday / $habitsTotal")
                 }
             }
@@ -2002,10 +1984,10 @@ private fun DailyGoalsWidget(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Daily Goals & Focus Target", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(if (focusGoal > 0) "Daily goals" else "Today’s priorities", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "Focus Target: ${focusMinutes}m / ${focusGoal}m",
+                text = if (focusGoal > 0) "${focusMinutes}m of ${focusGoal}m" else "${focusMinutes}m of focus",
                 style = MaterialTheme.typography.bodySmall,
                 color = OrbitCyan
             )

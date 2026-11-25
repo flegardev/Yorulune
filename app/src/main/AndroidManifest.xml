@@ -18,6 +18,7 @@
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApplication">
@@ -31,7 +32,7 @@
         <receiver
             android:name=".widget.OrbitHomeWidgetProvider"
             android:exported="true"
-            android:label="Yorulune 10-in-1 Tasks, Habits &amp; Focus Widget">
+            android:label="Yorulune Today">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

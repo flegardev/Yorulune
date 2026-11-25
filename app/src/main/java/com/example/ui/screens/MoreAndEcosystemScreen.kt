@@ -74,7 +74,6 @@ import androidx.compose.ui.window.Dialog
 import com.example.data.model.AutomationRule
 import com.example.data.model.DashboardPresetConfig
 import com.example.data.model.FocusSessionRecord
-import com.example.data.model.NativeHomeWidgetVariant
 import com.example.data.model.OrbitHabit
 import com.example.data.model.OrbitProject
 import com.example.data.model.OrbitScreenDestination
@@ -116,7 +115,6 @@ fun MoreAndEcosystemScreen(
     onToggleWidget: (String) -> Unit,
     onToggleFavoriteWidget: (String) -> Unit = {},
     onSetWidgetSize: (String, String) -> Unit = { _, _ -> },
-    onSetHomeWidgetVariant: (String) -> Unit = {},
     onMoveWidget: (String, Boolean) -> Unit,
     onApplyPreset: (DashboardPresetConfig) -> Unit,
     onUpdatePreferences: ((UserPreferencesDoc) -> UserPreferencesDoc) -> Unit,
@@ -128,7 +126,6 @@ fun MoreAndEcosystemScreen(
     onImportIcs: (String) -> Unit,
     onSaveFileSaf: (String) -> Unit = {},
     onOpenFileSaf: () -> Unit = {},
-    onResetSeed: () -> Unit = {},
     onRestoreTaskFromTrash: (OrbitTask) -> Unit,
     onEmptyTrash: () -> Unit,
     onRequestNotificationPermission: () -> Unit
@@ -211,11 +208,9 @@ fun MoreAndEcosystemScreen(
                 enabledWidgets = preferences.enabledWidgets,
                 favoriteWidgets = preferences.favoriteWidgets,
                 widgetSizes = preferences.widgetSizes,
-                homeWidgetVariant = preferences.homeWidgetVariant,
                 onToggleWidget = onToggleWidget,
                 onToggleFavoriteWidget = onToggleFavoriteWidget,
                 onSetWidgetSize = onSetWidgetSize,
-                onSetHomeWidgetVariant = onSetHomeWidgetVariant,
                 onMoveWidget = onMoveWidget,
                 onApplyPreset = onApplyPreset
             )
@@ -236,7 +231,6 @@ fun MoreAndEcosystemScreen(
                 onImportIcs = onImportIcs,
                 onSaveFileSaf = onSaveFileSaf,
                 onOpenFileSaf = onOpenFileSaf,
-                onResetSeed = onResetSeed,
                 onRestoreTask = onRestoreTaskFromTrash,
                 onEmptyTrash = onEmptyTrash
             )
@@ -634,11 +628,9 @@ private fun WidgetGalleryAndEditorSection(
     enabledWidgets: List<String>,
     favoriteWidgets: List<String>,
     widgetSizes: Map<String, String>,
-    homeWidgetVariant: String,
     onToggleWidget: (String) -> Unit,
     onToggleFavoriteWidget: (String) -> Unit,
     onSetWidgetSize: (String, String) -> Unit,
-    onSetHomeWidgetVariant: (String) -> Unit,
     onMoveWidget: (String, Boolean) -> Unit,
     onApplyPreset: (DashboardPresetConfig) -> Unit
 ) {
@@ -678,41 +670,22 @@ private fun WidgetGalleryAndEditorSection(
                         Icon(Icons.Default.Widgets, contentDescription = null, tint = OrbitCyan)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            "10 Native Android Home-Screen Widgets",
+                            "Today widget",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                     }
                     Text(
-                        text = "Select the active native OS widget variant below or tap 'Mode ↻' directly on your Android home-screen widget to cycle all 10 modes.",
+                        text = "See pending tasks, add a task, or open the focus timer from larger sizes.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        NativeHomeWidgetVariant.entries.forEach { variant ->
-                            FilterChip(
-                                selected = homeWidgetVariant == variant.key,
-                                onClick = { onSetHomeWidgetVariant(variant.key) },
-                                label = { Text("${variant.number}. ${variant.title}") }
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Active Mode: ${NativeHomeWidgetVariant.fromKey(homeWidgetVariant).description}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = { OrbitHomeWidgetProvider.requestPinToHomeScreen(context) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("+ Pin Native OS Widget to Android Home Screen")
+                        Text("Add widget")
                     }
                 }
             }
@@ -1344,23 +1317,21 @@ private fun BackupRestoreAndTrashSection(
     onImportIcs: (String) -> Unit,
     onSaveFileSaf: (String) -> Unit,
     onOpenFileSaf: () -> Unit,
-    onResetSeed: () -> Unit,
     onRestoreTask: (OrbitTask) -> Unit,
     onEmptyTrash: () -> Unit
 ) {
     var importPayload by remember { mutableStateOf("") }
-    var confirmReset by remember { mutableStateOf(false) }
     var confirmEmptyTrash by remember { mutableStateOf(false) }
-    if (confirmReset || confirmEmptyTrash) {
+    if (confirmEmptyTrash) {
         androidx.compose.material3.AlertDialog(
-            onDismissRequest = { confirmReset = false; confirmEmptyTrash = false },
-            title = { Text(if (confirmReset) "Replace this workspace?" else "Permanently empty Trash?") },
-            text = { Text(if (confirmReset) "This replaces your tasks, projects, habits and focus history with example data. Export a JSON backup first." else "Trashed tasks will be permanently deleted. Export a JSON backup first if you need to keep them.") },
+            onDismissRequest = { confirmEmptyTrash = false },
+            title = { Text("Permanently empty Trash?") },
+            text = { Text("Trashed tasks will be permanently deleted. Export a JSON backup first if you need to keep them.") },
             confirmButton = { TextButton(onClick = {
-                if (confirmReset) onResetSeed() else onEmptyTrash()
-                confirmReset = false; confirmEmptyTrash = false
-            }) { Text(if (confirmReset) "Replace workspace" else "Delete permanently") } },
-            dismissButton = { TextButton(onClick = { confirmReset = false; confirmEmptyTrash = false }) { Text("Cancel") } }
+                onEmptyTrash()
+                confirmEmptyTrash = false
+            }) { Text("Delete permanently") } },
+            dismissButton = { TextButton(onClick = { confirmEmptyTrash = false }) { Text("Cancel") } }
         )
     }
 
@@ -1425,12 +1396,6 @@ private fun BackupRestoreAndTrashSection(
                         OutlinedButton(onClick = onExportIcs, modifier = Modifier.weight(1f)) {
                             Text("Preview .ICS")
                         }
-                    }
-                    OutlinedButton(
-                        onClick = { confirmReset = true },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Reset Workspace to Default Starter Seed")
                     }
                 }
             }

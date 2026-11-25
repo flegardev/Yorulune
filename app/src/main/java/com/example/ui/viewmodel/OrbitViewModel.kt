@@ -250,9 +250,6 @@ class OrbitViewModel(
         }
         else persistTimer()
         if (recoveredPayload?.optBoolean("active") == true) _snackbarMessage.value = "Recovered your focus session, paused. Resume when you are ready."
-        viewModelScope.launch {
-            repository.seedStarterWorkspaceIfEmpty()
-        }
     }
 
     fun clearSnackbar() {
@@ -271,13 +268,6 @@ class OrbitViewModel(
         _snackbarMessage.value = msg
     }
 
-    fun resetSeedData() {
-        viewModelScope.launch {
-            repository.resetToStarterSeed(preservePreferences = true)
-            _snackbarMessage.value = "Workspace reset to fresh starter seed data"
-        }
-    }
-
     // --- DETERMINISTIC TASK ACTIONS ---
 
     fun quickAddNaturalTask(rawInput: String, targetProjectId: String? = null, statusOverride: String? = null) {
@@ -292,15 +282,15 @@ class OrbitViewModel(
                     it.category.contains(parsed.projectHint, ignoreCase = true)
             }
             else -> null
-        } ?: projects.firstOrNull() ?: OrbitProject(id = "proj_personal", name = "Life & Wellness")
+        }
 
         val newTask = OrbitTask(
             title = parsed.cleanTitle,
             description = "",
             status = statusOverride ?: "todo",
             priority = parsed.priority,
-            projectId = matchedProject.id,
-            projectName = matchedProject.name,
+            projectId = matchedProject?.id.orEmpty(),
+            projectName = matchedProject?.name.orEmpty(),
             sectionName = if (parsed.reminderCategory.isNotBlank()) parsed.reminderCategory else "General",
             tags = parsed.tags,
             startDateEpochDay = parsed.startDateEpochDay,

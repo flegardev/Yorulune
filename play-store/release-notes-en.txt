@@ -1,7 +1,1 @@
-Draft for owner review — Yorulune (provisional)
-• New café-inspired identity, launcher artwork and Japanese-designed fonts.
-• Improved theme consistency and readable accent colors.
-• Existing package identity and local database schema retained.
-• Safer document imports and clearer export/privacy controls.
-
-Interrupted focus timers now recover paused after process death. Resume when ready.
+Start with an empty workspace and add a task with just a title. Today, Tasks and Focus are front and center. Calendar and advanced organization are available from More options. The Today widget adapts as you resize it.

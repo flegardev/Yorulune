@@ -547,7 +547,7 @@ fun FocusCockpitScreen(
     ambientSound: String,
     ambientVolume: Float = 0.45f,
     deepFocusZenMode: Boolean,
-    dailyFocusGoalMinutes: Int = 120,
+    dailyFocusGoalMinutes: Int = 0,
     onSelectMode: (String, Int?) -> Unit,
     onResetTimer: () -> Unit,
     onSelectTask: (OrbitTask?) -> Unit,
@@ -831,7 +831,7 @@ fun FocusCockpitScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Focus Statistics & Session History", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text("Goal: ${totalFocusMinutes}m / ${dailyFocusGoalMinutes}m", style = MaterialTheme.typography.labelMedium, color = OrbitEmerald)
+                            Text(if (dailyFocusGoalMinutes > 0) "${totalFocusMinutes}m of ${dailyFocusGoalMinutes}m" else "${totalFocusMinutes}m", style = MaterialTheme.typography.labelMedium, color = OrbitEmerald)
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         if (focusSessions.isEmpty()) {

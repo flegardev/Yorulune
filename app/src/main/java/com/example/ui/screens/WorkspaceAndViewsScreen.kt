@@ -818,13 +818,7 @@ fun TaskDetailAndCreationModal(
     onStartFocusSession: (OrbitTask) -> Unit
 ) {
     val today = remember { LocalDate.now().toEpochDay() }
-    val base = initialTask ?: OrbitTask(
-        dueDateEpochDay = today,
-        scheduledDateEpochDay = today,
-        startDateEpochDay = today,
-        projectId = projects.firstOrNull()?.id ?: "proj_personal",
-        projectName = projects.firstOrNull()?.name ?: "Personal"
-    )
+    val base = initialTask ?: OrbitTask(projectId = "", projectName = "", estimatedMinutes = 0)
 
     var title by remember(base) { mutableStateOf(base.title) }
     var description by remember(base) { mutableStateOf(base.description) }
@@ -850,7 +844,9 @@ fun TaskDetailAndCreationModal(
     var newCustomFieldText by remember { mutableStateOf("") }
 
     val reminderOffsets = remember(base.multipleReminderOffsets) {
-        mutableStateListOf<Int>().apply { addAll(base.multipleReminderOffsets.ifEmpty { listOf(0, 15) }) }
+        mutableStateListOf<Int>().apply {
+            addAll(base.multipleReminderOffsets.ifEmpty { listOf(base.reminderOffsetMinutes).filter { it >= 0 } })
+        }
     }
     val subtasksList = remember(base.subtasks) {
         mutableStateListOf<String>().apply { addAll(base.subtasks) }
@@ -1317,9 +1313,10 @@ fun TaskDetailAndCreationModal(
                                     projectId = projectId,
                                     projectName = projectName,
                                     energyLevel = energyLevel,
-                                    estimatedMinutes = (estimatedMinutes.toIntOrNull() ?: 25).coerceIn(1, 1440),
+                                    estimatedMinutes = (estimatedMinutes.toIntOrNull() ?: 0).coerceIn(0, 1440),
                                     recurrenceRule = recurrenceRule,
                                     reminderEscalation = reminderEscalation,
+                                    reminderOffsetMinutes = reminderOffsets.firstOrNull() ?: -1,
                                     multipleReminderOffsets = reminderOffsets.toList(),
                                     assigneeName = reminderCategory,
                                     locationTrigger = locationTrigger.trim(),
@@ -1328,7 +1325,7 @@ fun TaskDetailAndCreationModal(
                                     isImportant = isImportant,
                                     isUrgent = isUrgent,
                                     dueDateEpochDay = dueDateEpochDay,
-                                    scheduledDateEpochDay = dueDateEpochDay,
+                                    scheduledDateEpochDay = base.scheduledDateEpochDay,
                                     deadlineEpochDay = deadlineEpochDay,
                                     dependsOnTaskId = dependsOnTaskId,
                                     subtasks = subtasksList.toList(),
