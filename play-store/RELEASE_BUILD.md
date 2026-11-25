@@ -15,3 +15,5 @@ For debug builds, provide a local QA-only keystore as `debug.keystore` in the re
 Set the existing upload keystore path as `KEYSTORE_PATH` and inject `STORE_PASSWORD` and `KEY_PASSWORD` through your local signing environment. The Gradle signing configuration uses alias `upload`. For a different verified alias, use the Android Studio signing wizard. Check the upload certificate SHA-256 in Play Console before signing. Compare it with the signed bundle certificate, run bundletool validation, inspect the bundle manifest and check page-size compatibility before uploading to Alpha.
 
 Play Console showed the Alpha release available to testers and production access pending. A production-access application requires at least 12 opt-ins sustained for at least 14 days.
+
+[Current phone screenshots](screenshots/release-1.1.0/phone) use fictional test records and were captured in the running Android app. Earlier screenshot sets are historical.
